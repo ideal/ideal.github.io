@@ -21,7 +21,7 @@ after_script:
     - git config user.email "idealities@gmail.com"
     - git add .
     - git commit -m "update blog pages by ci"
-    - git push --force --quite "https://${CI_TOKEN}@${GH_LOCATION}" origin master
+    - git push --force --quiet "https://${CI_TOKEN}@${GH_LOCATION}" origin master
 
 branches:
     only:
