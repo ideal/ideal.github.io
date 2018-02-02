@@ -14,6 +14,7 @@ script:
 
 after_script:
     - git clone https://${GH_LOCATION} blog
+    - cd blog && git checkout master && cd ..
     - mv blog/.git public
     - cd public
     - git init
