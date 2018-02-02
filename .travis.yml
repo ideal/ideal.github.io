@@ -1,0 +1,32 @@
+language: node_js
+
+node_js: node
+
+cache:
+  directories:
+    - node_modules
+
+install:
+    - npm install
+
+script:
+    - hexo clean && hexo generate
+
+after_script:
+    - git clone https://${GH_LOCATION} blog
+    - mv blog/.git public
+    - cd public
+    - git init
+    - git config user.name "ideal"
+    - git config user.email "idealities@gmail.com"
+    - git add .
+    - git commit -m "update blog pages by ci"
+    - git push --force --quite "https://${CI_TOKEN}@${GH_LOCATION}" origin master
+
+branches:
+    only:
+        - source
+
+env:
+    global:
+        - GH_LOCATION: github.com/ideal/ideal.github.io.git
