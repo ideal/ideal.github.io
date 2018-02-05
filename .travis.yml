@@ -9,6 +9,9 @@ cache:
 install:
     - npm install
 
+before_script:
+    - timedatectl set-timezone Asia/Shanghai
+
 script:
     - hexo clean && hexo generate
 
