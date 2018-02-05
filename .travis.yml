@@ -15,6 +15,7 @@ script:
 after_script:
     - git clone https://${GH_LOCATION} blog
     - mv blog/.git public
+    - if [ -f blog/CNAME ]; then cp blog/CNAME public/; fi
     - cd public
     - git init
     - git config user.name "ideal"
