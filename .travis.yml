@@ -9,9 +9,6 @@ cache:
 install:
     - npm install
 
-before_script:
-    - timedatectl set-timezone Asia/Shanghai
-
 script:
     - hexo clean && hexo generate
 
@@ -33,3 +30,4 @@ branches:
 env:
     global:
         - GH_LOCATION: github.com/ideal/ideal.github.io.git
+        - TZ: Asia/Shanghai
