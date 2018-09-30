@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Life is different">
 <meta property="og:description" content="这本书里提到，在内核初始化的过程中，会通过内联汇编从RTC读取当前时间。大概逻辑是：通过汇编，分别读取当前秒、当前分钟、当前小时等。每次读取，先针对IO端口0x70设置读取的寄存器，然后从0x71读出相应的字节。再进行一定的转换。然后调用kernel_mktime()得到一个unix时间戳。 至于为什么是0x70，这里有相关的说明。通过/proc/ioports也可以看到。 123456789$">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-30T06:27:11.882Z">
+<meta property="og:updated_time" content="2018-09-30T09:34:36.639Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="read time from rtc">
 <meta name="twitter:description" content="这本书里提到，在内核初始化的过程中，会通过内联汇编从RTC读取当前时间。大概逻辑是：通过汇编，分别读取当前秒、当前分钟、当前小时等。每次读取，先针对IO端口0x70设置读取的寄存器，然后从0x71读出相应的字节。再进行一定的转换。然后调用kernel_mktime()得到一个unix时间戳。 至于为什么是0x70，这里有相关的说明。通过/proc/ioports也可以看到。 123456789$">
@@ -236,7 +236,7 @@
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/02/02/read-time-from-rtc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideal">
+      <meta itemprop="name" content="<a href="https://github.com/ideal">ideal</a>">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -417,7 +417,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">ideal</p>
+              <p class="site-author-name" itemprop="name"><a href="https://github.com/ideal">ideal</a></p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -482,7 +482,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">ideal</span>
+  <span class="author" itemprop="copyrightHolder"><a href="https://github.com/ideal">ideal</a></span>
 
   
 </div>
