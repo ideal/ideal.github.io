@@ -36,7 +36,7 @@ file: .string  "/bin/ps"
 ```shell
 $ gcc example.s -o example
 ```
-编译即可。
+编译即可。如果编译遇到了类似`relocation R_X86_64_32S against '.text' can not be used when making a shared object; recompile with -fPIC`的错误，可以给gcc加个`-static`参数，或者按照[这里](https://stackoverflow.com/questions/48071280/nasm-symbol-printf-causes-overflow-in-r-x86-64-pc32-relocation)的说明，添加`-no-pie`参数。
 
 或者也可以：
 ```shell
