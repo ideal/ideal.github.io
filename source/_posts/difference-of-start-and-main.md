@@ -5,7 +5,7 @@ tags:
     - asm
 ---
 
-如果使用gcc编译，并且连接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如：
+如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如：
 
 ```assembly
 # example.s
