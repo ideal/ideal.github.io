@@ -56,3 +56,33 @@ $ as example.s  -o example.o && ld example.o -o example
 ```
 
 此时对生成的文件执行ldd，会提示不是一个动态链接的可执行文件。
+
+当然构造给execve()的argv参数，也可以放到数据区：
+
+```assembly
+# example.s
+
+    .data
+argv:   .quad 0x00
+        .quad 0x00
+
+    .text
+    .global main
+main:
+    pushq  %rbp
+    movq   %rsp, %rbp
+
+    movq  $file, %rdi
+    movq  $59, %rax    # 系统调用号，来自/usr/include/asm/unistd_64.h
+
+    movq %rdi, (argv)
+    movq $argv, %rsi
+    movq  $0, %rdx
+    syscall
+
+    movl $0, %eax
+    leave
+    ret
+
+file: .string  "/bin/ps"
+```
