@@ -32,6 +32,8 @@ main:
 file: .string  "/bin/ps"
 ```
 
+<!-- more --> 
+
 通过
 ```shell
 $ gcc example.s -o example

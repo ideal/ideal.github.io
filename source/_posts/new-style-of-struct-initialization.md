@@ -31,6 +31,8 @@ struct task t1 = { 20, };
 struct task t2 = { .start_time = 1537844400, .args[1].key = (char *)0xbeef };
 ```
 
+<!-- more --> 
+
 ```c
 // C99中增加了一种新的赋值方式：
 
