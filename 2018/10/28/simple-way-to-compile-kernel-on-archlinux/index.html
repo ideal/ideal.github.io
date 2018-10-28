@@ -108,26 +108,25 @@
 
 
 
-  <meta name="description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+  <meta name="description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
+<meta name="keywords" content="kernel compiling">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how to calculate page directory and page table size">
-<meta property="og:url" content="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/index.html">
+<meta property="og:title" content="simple way to compile kernel on archlinux">
+<meta property="og:url" content="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+<meta property="og:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
 <meta property="og:updated_time" content="2018-10-28T13:49:24.899Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how to calculate page directory and page table size">
-<meta name="twitter:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
-<meta name="twitter:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta name="twitter:title" content="simple way to compile kernel on archlinux">
+<meta name="twitter:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/"/>
+  <link rel="canonical" href="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/"/>
 
 
 
@@ -137,7 +136,7 @@
   };
 </script>
 
-  <title>how to calculate page directory and page table size | Life is different</title>
+  <title>simple way to compile kernel on archlinux | Life is different</title>
   
 
 
@@ -286,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href="https://github.com/ideal">ideal</a>">
@@ -303,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how to calculate page directory and page table size
+          <h1 class="post-title" itemprop="name headline">simple way to compile kernel on archlinux
               
             
           </h1>
@@ -328,24 +327,12 @@
                 
               
 
-              <time title="创建时间：2018-04-08 12:59:44" itemprop="dateCreated datePublished" datetime="2018-04-08T12:59:44+08:00">2018-04-08</time>
+              <time title="创建时间：2018-10-28 20:53:38 / 修改时间：21:49:24" itemprop="dateCreated datePublished" datetime="2018-10-28T20:53:38+08:00">2018-10-28</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-28 21:49:24" itemprop="dateModified" datetime="2018-10-28T21:49:24+08:00">2018-10-28</time>
               
             
           </span>
@@ -359,8 +346,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="commentCount"></span>
+                <a href="/2018/10/28/simple-way-to-compile-kernel-on-archlinux/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/28/simple-way-to-compile-kernel-on-archlinux/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -388,21 +375,32 @@
       
 
       
-        <p>Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法：</p>
-<p>由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。</p>
-<p>每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。</p>
-<p>所以可以看到，它填充了4个页的页表。</p>
-<p>很明显4个页表，只需要页目录里的4项，就可以定位这些页表了。</p>
-<p>也可以这样计算：16KB，也就是2^14，(2^14/2^12) = 4。所以只占用了页目录表的前4项。</p>
-<p><img src="/images/page-directory-and-page-table.png" alt="page directory and page table"></p>
-<p>实际上，4KB大小的页目录表，已经能够寻址4GB的空间了。</p>
-<p>2^32 / 2^12 = 2^20</p>
-<p>每项4字节，也就是需要4MB的页表。</p>
-<p>为了寻址4MB的页表：2^22 / 2^12 = 1024，每个4字节，刚好页目录表是4KB。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html" target="_blank" rel="noopener">https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html</a></li>
-</ol>
+        <p>实际上ArchLinux的<a href="https://wiki.archlinux.org/index.php/Kernel/Traditional_compilation" target="_blank" rel="noopener">Wiki</a>已经写得非常清楚了，这里只是记录、简化和补充。</p>
+<p>首先下载一份源代码，比如<a href="https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz" target="_blank" rel="noopener">这个</a>。同时下载对应的签名，比如<a href="https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.sign" target="_blank" rel="noopener">这个</a>。</p>
+<p>验证签名：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --list-packets linux-4.19.tar.sign</span><br><span class="line">$ gpg --recv-keys &lt;上一步输出的keyid&gt;</span><br></pre></td></tr></table></figure>
+<p>第二步之后可以通过<code>gpg --list-public-keys</code>查看导入的公钥。</p>
+<p>然后进行验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ unxz linux-4.19.tar.xz</span><br><span class="line">$ gpg --verify linux-4.19.tar.sign linux-4.19.tar</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>之后解压linux-4.19.tar然后切换到解压生成的目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make clean &amp;&amp; make mrproper</span><br></pre></td></tr></table></figure>
+<p>复制一份config文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ zcat /proc/config.gz &gt; .config</span><br></pre></td></tr></table></figure>
+<p>一般来说.config不需要什么修改，假如需要编译一份需要带有调试信息的内核，只需要修改这里：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">CONFIG_DEBUG_INFO</span>=y</span><br></pre></td></tr></table></figure>
+<p>当然也可以加个局部版本号：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">CONFIG_LOCALVERSION</span>=<span class="string">"-fatcat"</span></span><br></pre></td></tr></table></figure>
+<p>之后便是编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
+<p>时间会比较长。编译完成之后：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make modules_install</span><br><span class="line">$ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-fatcat</span><br></pre></td></tr></table></figure>
+<p>生成ramdisk：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkinitcpio -k 4.19-fatcat -g /boot/initramfs-linux-fatcat.img</span><br></pre></td></tr></table></figure>
+<p>之后便是修改增加启动项，如果是grub，只需要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo grub-mkconfig &gt; /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+<p>另外如果通过dkms安装过virtualbox模块，还需要运行dkms对新的内核编译一份对应的模块：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dkms autoinstall -k 4.19-fatcat</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -421,6 +419,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/kernel-compiling/" rel="tag"># kernel compiling</a>
+          
+        </div>
+      
 
       
       
@@ -430,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/02/read-time-from-rtc/" rel="next" title="read time from rtc">
-                <i class="fa fa-chevron-left"></i> read time from rtc
+              <a href="/2018/10/27/new-style-of-struct-initialization/" rel="next" title="new style of struct initialization">
+                <i class="fa fa-chevron-left"></i> new style of struct initialization
               </a>
             
           </div>
@@ -439,10 +443,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/30/difference-of-start-and-main/" rel="prev" title="difference of _start and main">
-                difference of _start and main <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
