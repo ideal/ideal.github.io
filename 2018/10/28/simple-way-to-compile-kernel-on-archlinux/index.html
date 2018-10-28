@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="Life is different">
 <meta property="og:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-28T13:49:24.899Z">
+<meta property="og:updated_time" content="2018-10-28T14:01:35.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="simple way to compile kernel on archlinux">
 <meta name="twitter:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
@@ -327,7 +327,7 @@
                 
               
 
-              <time title="创建时间：2018-10-28 20:53:38 / 修改时间：21:49:24" itemprop="dateCreated datePublished" datetime="2018-10-28T20:53:38+08:00">2018-10-28</time>
+              <time title="创建时间：2018-10-28 20:53:38 / 修改时间：22:01:35" itemprop="dateCreated datePublished" datetime="2018-10-28T20:53:38+08:00">2018-10-28</time>
             
 
             
@@ -396,11 +396,11 @@
 <p>时间会比较长。编译完成之后：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make modules_install</span><br><span class="line">$ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-fatcat</span><br></pre></td></tr></table></figure>
 <p>生成ramdisk：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkinitcpio -k 4.19-fatcat -g /boot/initramfs-linux-fatcat.img</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkinitcpio -k 4.19.0-fatcat -g /boot/initramfs-linux-fatcat.img</span><br></pre></td></tr></table></figure>
 <p>之后便是修改增加启动项，如果是grub，只需要：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo grub-mkconfig &gt; /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
 <p>另外如果通过dkms安装过virtualbox模块，还需要运行dkms对新的内核编译一份对应的模块：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dkms autoinstall -k 4.19-fatcat</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dkms autoinstall -k 4.19.0-fatcat</span><br></pre></td></tr></table></figure>
 
       
     </div>
