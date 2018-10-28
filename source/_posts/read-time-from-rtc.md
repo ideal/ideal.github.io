@@ -25,7 +25,7 @@ $ cat /proc/ioports
 
 RTC对应的IO端口地址正是0x70~0x77。
 
-<!-- more --> 
+<!-- more -->
 
 大致代码如下：
 

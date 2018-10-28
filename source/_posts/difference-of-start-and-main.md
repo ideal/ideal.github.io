@@ -32,7 +32,7 @@ main:
 file: .string  "/bin/ps"
 ```
 
-<!-- more --> 
+<!-- more -->
 
 通过
 ```shell
