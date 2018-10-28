@@ -67,7 +67,7 @@ $ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-fatcat
 生成ramdisk：
 
 ```bash
-$ sudo mkinitcpio -k 4.19-fatcat -g /boot/initramfs-linux-fatcat.img
+$ sudo mkinitcpio -k 4.19.0-fatcat -g /boot/initramfs-linux-fatcat.img
 ```
 
 之后便是修改增加启动项，如果是grub，只需要：
@@ -79,7 +79,7 @@ $ sudo grub-mkconfig > /boot/grub/grub.cfg
 另外如果通过dkms安装过virtualbox模块，还需要运行dkms对新的内核编译一份对应的模块：
 
 ```bash
-$ sudo dkms autoinstall -k 4.19-fatcat
+$ sudo dkms autoinstall -k 4.19.0-fatcat
 ```
 
 [1]: https://wiki.archlinux.org/index.php/Kernel/Traditional_compilation
