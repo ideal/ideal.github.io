@@ -108,25 +108,24 @@
 
 
 
-  <meta name="description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
-<meta name="keywords" content="kernel compiling">
+  <meta name="description" content="MySQL有一种作为嵌入运行服务器的方式。此处做个记录。另外5.7的mysql_library_init()还有相关的说明，8.0的已经没有了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="simple way to compile kernel on archlinux">
-<meta property="og:url" content="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/index.html">
+<meta property="og:title" content="mysql embedded server example">
+<meta property="og:url" content="http://ideal.github.io/2019/02/18/mysql-embedded-server-example/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
+<meta property="og:description" content="MySQL有一种作为嵌入运行服务器的方式。此处做个记录。另外5.7的mysql_library_init()还有相关的说明，8.0的已经没有了。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-18T14:59:30.405Z">
+<meta property="og:updated_time" content="2019-02-18T14:59:30.401Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="simple way to compile kernel on archlinux">
-<meta name="twitter:description" content="实际上ArchLinux的Wiki已经写得非常清楚了，这里只是记录、简化和补充。 首先下载一份源代码，比如这个。同时下载对应的签名，比如这个。 验证签名： 12$ gpg --list-packets linux-4.19.tar.sign$ gpg --recv-keys &amp;lt;上一步输出的keyid&amp;gt; 第二步之后可以通过gpg --list-public-keys查看导入的公钥。 然后">
+<meta name="twitter:title" content="mysql embedded server example">
+<meta name="twitter:description" content="MySQL有一种作为嵌入运行服务器的方式。此处做个记录。另外5.7的mysql_library_init()还有相关的说明，8.0的已经没有了。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/">
+  <link rel="canonical" href="http://ideal.github.io/2019/02/18/mysql-embedded-server-example/">
 
 
 
@@ -136,7 +135,7 @@
   };
 </script>
 
-  <title>simple way to compile kernel on archlinux | Life is different</title>
+  <title>mysql embedded server example | Life is different</title>
   
 
 
@@ -285,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/10/28/simple-way-to-compile-kernel-on-archlinux/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/02/18/mysql-embedded-server-example/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
@@ -302,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">simple way to compile kernel on archlinux
+          <h1 class="post-title" itemprop="name headline">mysql embedded server example
               
             
           </h1>
@@ -327,7 +326,7 @@
                 
               
 
-              <time title="创建时间：2018-10-28 20:53:38" itemprop="dateCreated datePublished" datetime="2018-10-28T20:53:38+08:00">2018-10-28</time>
+              <time title="创建时间：2019-02-18 22:33:28" itemprop="dateCreated datePublished" datetime="2019-02-18T22:33:28+08:00">2019-02-18</time>
             
 
             
@@ -342,8 +341,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/28/simple-way-to-compile-kernel-on-archlinux/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/28/simple-way-to-compile-kernel-on-archlinux/" itemprop="commentCount"></span>
+                <a href="/2019/02/18/mysql-embedded-server-example/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/18/mysql-embedded-server-example/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -371,32 +370,10 @@
       
 
       
-        <p>实际上ArchLinux的<a href="https://wiki.archlinux.org/index.php/Kernel/Traditional_compilation" target="_blank" rel="noopener">Wiki</a>已经写得非常清楚了，这里只是记录、简化和补充。</p>
-<p>首先下载一份源代码，比如<a href="https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz" target="_blank" rel="noopener">这个</a>。同时下载对应的签名，比如<a href="https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.sign" target="_blank" rel="noopener">这个</a>。</p>
-<p>验证签名：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --list-packets linux-4.19.tar.sign</span><br><span class="line">$ gpg --recv-keys &lt;上一步输出的keyid&gt;</span><br></pre></td></tr></table></figure>
-<p>第二步之后可以通过<code>gpg --list-public-keys</code>查看导入的公钥。</p>
-<p>然后进行验证：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ unxz linux-4.19.tar.xz</span><br><span class="line">$ gpg --verify linux-4.19.tar.sign linux-4.19.tar</span><br></pre></td></tr></table></figure>
+        <p>MySQL有一种作为嵌入运行服务器的<a href="https://dev.mysql.com/doc/refman/5.7/en/libmysqld.html" target="_blank" rel="noopener">方式</a>。此处做个记录。<br>另外5.7的<a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-library-init.html" target="_blank" rel="noopener">mysql_library_init()</a>还有相关的说明，<a href="https://dev.mysql.com/doc/refman/8.0/en/mysql-library-init.html" target="_blank" rel="noopener">8.0的</a>已经没有了。</p>
 <a id="more"></a>
-<p>之后解压linux-4.19.tar然后切换到解压生成的目录。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make clean &amp;&amp; make mrproper</span><br></pre></td></tr></table></figure>
-<p>复制一份config文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ zcat /proc/config.gz &gt; .config</span><br></pre></td></tr></table></figure>
-<p>一般来说.config不需要什么修改，假如需要编译一份需要带有调试信息的内核，只需要修改这里：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">CONFIG_DEBUG_INFO</span>=y</span><br></pre></td></tr></table></figure>
-<p>当然也可以加个局部版本号：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">CONFIG_LOCALVERSION</span>=<span class="string">"-fatcat"</span></span><br></pre></td></tr></table></figure>
-<p>之后便是编译：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
-<p>时间会比较长。编译完成之后：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make modules_install</span><br><span class="line">$ sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-fatcat</span><br></pre></td></tr></table></figure>
-<p>生成ramdisk：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkinitcpio -k 4.19.0-fatcat -g /boot/initramfs-linux-fatcat.img</span><br></pre></td></tr></table></figure>
-<p>之后便是修改增加启动项，如果是grub，只需要：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo grub-mkconfig &gt; /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
-<p>另外如果通过dkms安装过virtualbox模块，还需要运行dkms对新的内核编译一份对应的模块：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dkms autoinstall -k 4.19.0-fatcat</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mysql/mysql.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *mysql_init_args[] = &#123;</span><br><span class="line">        <span class="string">"mysql_embedded_test"</span>,</span><br><span class="line">        <span class="string">"--datadir=/tmp/mysql"</span>,</span><br><span class="line">        <span class="string">"--default-storage-engine=InnoDB"</span>,</span><br><span class="line">        <span class="string">"--skip-grant-tables"</span>,</span><br><span class="line">        <span class="string">"--myisam-recover-options=FORCE"</span>,</span><br><span class="line">        <span class="string">"--key-buffer-size=16777216"</span>,</span><br><span class="line">        <span class="string">"--character-set-server=utf8mb4"</span>,</span><br><span class="line">        <span class="string">"--collation-server=utf8mb4_bin"</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_library_init(<span class="keyword">sizeof</span>(mysql_init_args) / <span class="keyword">sizeof</span>(mysql_init_args[<span class="number">0</span>]), mysql_init_args, <span class="literal">NULL</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"mysql library init error\n"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    MYSQL *m = mysql_init(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_options(m, MYSQL_OPT_USE_EMBEDDED_CONNECTION, <span class="literal">NULL</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"mysql set options error\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!mysql_real_connect(m, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"mysql connect error\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_query(m, <span class="string">"create database mysql_embedded_test;"</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"create database failed: %s\n"</span>, mysql_error(m));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_query(m, <span class="string">"use mysql_embedded_test;"</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"select database failed: %s\n"</span>, mysql_error(m));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_query(m, <span class="string">"create table mysql_embedded_test_table (\</span></span><br><span class="line"><span class="string">        id bigint(20) unsigned auto_increment,\</span></span><br><span class="line"><span class="string">        name varchar(255), primary key (id));"</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"create table failed: %s\n"</span>, mysql_error(m));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_query(m, <span class="string">"insert into mysql_embedded_test_table (name) values ('aaaa');"</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"insert table failed: %s\n"</span>, mysql_error(m));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mysql_query(m, <span class="string">"select * from mysql_embedded_test_table;"</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"select table failed: %s\n"</span>, mysql_error(m));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    MYSQL_RES *result = mysql_store_result(m);</span><br><span class="line">    MYSQL_ROW row;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (row = mysql_fetch_row(result)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s - %s\n"</span>, row[<span class="number">0</span>], row[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mysql_free_result(result);</span><br><span class="line">    mysql_close(m);</span><br><span class="line">    mysql_library_end();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当前编译的时候需要链接libmysqld.so，而不是libmysqlclient.so。另外运行时需要保证数据目录（比如这里是/tmp/mysql）已存在。</p>
 
       
     </div>
@@ -415,12 +392,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/kernel-compiling/" rel="tag"># kernel compiling</a>
-          
-        </div>
-      
 
       
       
@@ -430,8 +401,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/27/new-style-of-struct-initialization/" rel="next" title="new style of struct initialization">
-                <i class="fa fa-chevron-left"></i> new style of struct initialization
+              <a href="/2018/11/30/separate-executable-file-and-debug-infomation/" rel="next" title="separate executable file and debug infomation">
+                <i class="fa fa-chevron-left"></i> separate executable file and debug infomation
               </a>
             
           </div>
@@ -439,10 +410,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/30/separate-executable-file-and-debug-infomation/" rel="prev" title="separate executable file and debug infomation">
-                separate executable file and debug infomation <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
