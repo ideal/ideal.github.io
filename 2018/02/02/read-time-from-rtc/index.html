@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="Life is different">
 <meta property="og:description" content="这本书里提到，在内核初始化的过程中，会通过内联汇编从RTC读取当前时间。大概逻辑是：通过汇编，分别读取当前秒、当前分钟、当前小时等。每次读取，先针对IO端口0x70设置读取的寄存器，然后从0x71读出相应的字节。再进行一定的转换。然后调用kernel_mktime()得到一个unix时间戳。 至于为什么是0x70，这里有相关的说明。通过/proc/ioports也可以看到。 123456789$">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-18T14:59:30.401Z">
+<meta property="og:updated_time" content="2019-02-19T05:19:25.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="read time from rtc">
 <meta name="twitter:description" content="这本书里提到，在内核初始化的过程中，会通过内联汇编从RTC读取当前时间。大概逻辑是：通过汇编，分别读取当前秒、当前分钟、当前小时等。每次读取，先针对IO端口0x70设置读取的寄存器，然后从0x71读出相应的字节。再进行一定的转换。然后调用kernel_mktime()得到一个unix时间戳。 至于为什么是0x70，这里有相关的说明。通过/proc/ioports也可以看到。 123456789$">
