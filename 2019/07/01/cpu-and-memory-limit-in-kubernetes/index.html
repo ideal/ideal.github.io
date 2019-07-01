@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如： 12345678910111213141516171819202122# example.s    .text    .global ma">
-<meta name="keywords" content="asm">
+  <meta name="description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
+<meta name="keywords" content="kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="difference of _start and main">
-<meta property="og:url" content="http://ideal.github.io/2018/09/30/difference-of-start-and-main/index.html">
+<meta property="og:title" content="kubernetes中的容器cpu和内存限制">
+<meta property="og:url" content="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如： 12345678910111213141516171819202122# example.s    .text    .global ma">
+<meta property="og:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-07-01T10:31:05.638Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="difference of _start and main">
-<meta name="twitter:description" content="如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如： 12345678910111213141516171819202122# example.s    .text    .global ma">
+<meta name="twitter:title" content="kubernetes中的容器cpu和内存限制">
+<meta name="twitter:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/09/30/difference-of-start-and-main/">
+  <link rel="canonical" href="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/">
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>difference of _start and main | Life is different</title>
+  <title>kubernetes中的容器cpu和内存限制 | Life is different</title>
   
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/09/30/difference-of-start-and-main/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">difference of _start and main
+          <h1 class="post-title" itemprop="name headline">kubernetes中的容器cpu和内存限制
               
             
           </h1>
@@ -327,7 +327,7 @@
                 
               
 
-              <time title="创建时间：2018-09-30 11:30:47" itemprop="dateCreated datePublished" datetime="2018-09-30T11:30:47+08:00">2018-09-30</time>
+              <time title="创建时间：2019-07-01 15:28:48" itemprop="dateCreated datePublished" datetime="2019-07-01T15:28:48+08:00">2019-07-01</time>
             
 
             
@@ -342,8 +342,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/30/difference-of-start-and-main/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/09/30/difference-of-start-and-main/" itemprop="commentCount"></span>
+                <a href="/2019/07/01/cpu-and-memory-limit-in-kubernetes/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/01/cpu-and-memory-limit-in-kubernetes/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -371,19 +371,25 @@
       
 
       
-        <p>如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如：</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># example.s</span><br><span class="line"></span><br><span class="line"><span class="meta">    .text</span></span><br><span class="line"><span class="meta">    .global</span> main</span><br><span class="line"><span class="symbol">main:</span></span><br><span class="line">    pushq  %rbp</span><br><span class="line">    <span class="keyword">movq</span>   %rsp, %rbp</span><br><span class="line"></span><br><span class="line">    <span class="keyword">movq</span>  $file, %rdi</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$59</span>, %rax    # 系统调用号，来自/usr/include/asm/unistd_64.h</span><br><span class="line"></span><br><span class="line">    pushq <span class="number">$0</span></span><br><span class="line">    pushq %rdi</span><br><span class="line">    <span class="keyword">movq</span>  %rsp, %rsi   # 构造一个execve()需要的argv参数</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$0</span>, %rdx</span><br><span class="line">    <span class="keyword">syscall</span></span><br><span class="line"></span><br><span class="line">    movl <span class="number">$0</span>, %eax</span><br><span class="line">    <span class="keyword">leave</span></span><br><span class="line">    <span class="keyword">ret</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">file:</span> .string  <span class="string">"/bin/ps"</span></span><br></pre></td></tr></table></figure>
+        <p>K8S部署容器时可以<a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/cpu-memory-limit/" target="_blank" rel="noopener">指定CPU和内存的资源限制</a>，其真正实现也是通过CGroups做到的。我们来看个例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    resources:</span></span><br><span class="line"><span class="attr">      limits:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">500</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">400</span><span class="string">Mi</span></span><br><span class="line"><span class="attr">      requests:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">200</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">200</span><span class="string">Mi</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>通过<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc example.s -o example</span></span><br></pre></td></tr></table></figure></p>
-<p>编译即可。如果编译遇到了类似<code>relocation R_X86_64_32S against &#39;.text&#39; can not be used when making a shared object; recompile with -fPIC</code>的错误，可以给gcc加个<code>-static</code>参数，或者按照<a href="https://stackoverflow.com/questions/48071280/nasm-symbol-printf-causes-overflow-in-r-x86-64-pc32-relocation" target="_blank" rel="noopener">这里</a>的说明，添加<code>-no-pie</code>参数。</p>
-<p>或者也可以：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> as example.s -o example.o &amp;&amp; ld -dynamic-linker /lib64/ld-linux-x86-64.so.2 /usr/lib64/crt1.o /usr/lib64/crti.o /usr/lib64/crtn.o -lc example.o -o example</span></span><br></pre></td></tr></table></figure></p>
-<p>当然crt那些文件的路径可能会有些差异。</p>
-<p>如果你不需要链接libc，只需要把<code>main</code>改成<code>_start</code>，然后这样编译：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc -nostdlib example.s -o example</span></span><br></pre></td></tr></table></figure>
-<p>，或者分成两步：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> as example.s  -o example.o &amp;&amp; ld example.o -o example</span></span><br></pre></td></tr></table></figure></p>
-<p>此时对生成的文件执行ldd，会提示不是一个动态链接的可执行文件。</p>
-<p>当然构造给execve()的argv参数，也可以放到数据区：</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># example.s</span><br><span class="line"></span><br><span class="line"><span class="meta">    .data</span></span><br><span class="line"><span class="symbol">argv:</span>   .quad <span class="number">0x00</span></span><br><span class="line"><span class="meta">        .quad</span> <span class="number">0x00</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    .text</span></span><br><span class="line"><span class="meta">    .global</span> main</span><br><span class="line"><span class="symbol">main:</span></span><br><span class="line">    pushq  %rbp</span><br><span class="line">    <span class="keyword">movq</span>   %rsp, %rbp</span><br><span class="line"></span><br><span class="line">    <span class="keyword">movq</span>  $file, %rdi</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$59</span>, %rax    # 系统调用号，来自/usr/include/asm/unistd_64.h</span><br><span class="line"></span><br><span class="line">    <span class="keyword">movq</span> %rdi, (argv)</span><br><span class="line">    <span class="keyword">movq</span> $argv, %rsi</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$0</span>, %rdx</span><br><span class="line">    <span class="keyword">syscall</span></span><br><span class="line"></span><br><span class="line">    movl <span class="number">$0</span>, %eax</span><br><span class="line">    <span class="keyword">leave</span></span><br><span class="line">    <span class="keyword">ret</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">file:</span> .string  <span class="string">"/bin/ps"</span></span><br></pre></td></tr></table></figure>
+<p>limits表示指定资源的上限，requests表示创建容器时初始的资源请求。cpu的单位m表示1/1000核，比如这里的500m，其实表示0.5核心。如果不带单位，比如1或者1.0，则表示分配1核cpu。内存的单位可以是Mi、Gi，分别表示MB和GB。这里的设置就表示初始时cpu 0.2核，内存200M；上限cpu 0.5核，内存400M。</p>
+<p>首先来看cpu。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pod nginx -o=jsonpath=<span class="string">'&#123;.spec.containers[0].resources&#125;'</span></span><br><span class="line">map[limits:map[cpu:500m memory:400Mi] requests:map[cpu:200m memory:200Mi]]</span><br></pre></td></tr></table></figure>
+<p>可以看到确实设置了初始和上限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps|grep nginx|grep -v pause|cut -d<span class="string">' '</span> -f1</span><br><span class="line">7ac3aef786af</span><br><span class="line"></span><br><span class="line">$ docker inspect 7ac3aef786af --format <span class="string">'&#123;&#123;.HostConfig.CpuShares&#125;&#125; &#123;&#123;.HostConfig.CpuQuota&#125;&#125; &#123;&#123;.HostConfig.CpuPeriod&#125;&#125;'</span></span><br><span class="line">204 50000 100000</span><br></pre></td></tr></table></figure>
+<p>我们看到这里返回CpuShares是204，而不是200。这是因为K8S以1000为单位，而Docker以1024为单位。0.2*1024 =204.8。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ps -ef|grep nginx</span><br><span class="line">docker    5522  5279  0 08:34 pts/0    00:00:00 grep nginx</span><br><span class="line">root     23814 23796  0 08:01 ?        00:00:00 nginx: master process nginx -g daemon off;</span><br><span class="line">101      23833 23814  0 08:01 ?        00:00:00 nginx: worker process</span><br><span class="line"></span><br><span class="line">$ cat /proc/23814/cgroup |grep cpuacct</span><br><span class="line">8:cpu,cpuacct:/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971</span><br><span class="line"></span><br><span class="line">$ cat cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.shares</span><br><span class="line">204</span><br></pre></td></tr></table></figure>
+<p>最终我们在<code>/sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.shares</code>找到了这个初始值。</p>
+<p>另外，HostConfig.CpuPeriod对应cpu.cfs_period_us，HostConfig.CpuQuota对应cpu.cfs_quota_us。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.cfs_period_us</span><br><span class="line">100000</span><br><span class="line"></span><br><span class="line">$ cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.cfs_quota_us</span><br><span class="line">50000</span><br></pre></td></tr></table></figure>
+<p>这两个需要这样来换算。首先将单个核心cpu的带宽定义为0.1秒，也就是100000微秒。我们前面指定了上限500m，那么就是0.5*100000 = 5000微秒。这里的cpu.cfs_period_us也就是100000微秒。</p>
+<p>再来看内存的部分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect 7ac3aef786af --format <span class="string">'&#123;&#123;.HostConfig.Memory&#125;&#125;'</span></span><br><span class="line">419430400</span><br></pre></td></tr></table></figure>
+<p>也就是我们设置的内存上限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/23814/cgroup |grep memory</span><br><span class="line">6:memory:/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971</span><br><span class="line"></span><br><span class="line">$ cat /sys/fs/cgroup/memory/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/memory.limit_in_bytes</span><br><span class="line">419430400</span><br></pre></td></tr></table></figure>
+<p>可以看到和CGroups中对应的memory.limit_in_bytes是相同的，也就是内存限制通过CGroups实现的方式。</p>
 
       
     </div>
@@ -404,7 +410,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/asm/" rel="tag"># asm</a>
+            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
           
         </div>
       
@@ -417,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" rel="next" title="how to calculate page directory and page table size">
-                <i class="fa fa-chevron-left"></i> how to calculate page directory and page table size
+              <a href="/2019/02/18/mysql-embedded-server-example/" rel="next" title="mysql embedded server example">
+                <i class="fa fa-chevron-left"></i> mysql embedded server example
               </a>
             
           </div>
@@ -426,10 +432,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/27/new-style-of-struct-initialization/" rel="prev" title="new style of struct initialization">
-                new style of struct initialization <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
