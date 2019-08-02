@@ -108,26 +108,28 @@
 
 
 
-  <meta name="description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+  <meta name="description" content="kubernetes支持很多种Volume，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被反弹Shell之后，会存在安全隐患。我们可以通过s">
+<meta name="keywords" content="kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how to calculate page directory and page table size">
-<meta property="og:url" content="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/index.html">
+<meta property="og:title" content="kubernetes中通过subPath挂载子目录">
+<meta property="og:url" content="http://ideal.github.io/2019/08/02/kubernetes中通过subPath挂载子目录/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+<meta property="og:description" content="kubernetes支持很多种Volume，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被反弹Shell之后，会存在安全隐患。我们可以通过s">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta property="og:image" content="http://ideal.github.io/images/mnt-in-container.png">
+<meta property="og:image" content="http://ideal.github.io/images/srv-in-node.png">
 <meta property="og:updated_time" content="2019-08-02T07:32:52.803Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how to calculate page directory and page table size">
-<meta name="twitter:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
-<meta name="twitter:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta name="twitter:title" content="kubernetes中通过subPath挂载子目录">
+<meta name="twitter:description" content="kubernetes支持很多种Volume，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被反弹Shell之后，会存在安全隐患。我们可以通过s">
+<meta name="twitter:image" content="http://ideal.github.io/images/mnt-in-container.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+  <link rel="canonical" href="http://ideal.github.io/2019/08/02/kubernetes中通过subPath挂载子目录/">
 
 
 
@@ -137,7 +139,7 @@
   };
 </script>
 
-  <title>how to calculate page directory and page table size | Life is different</title>
+  <title>kubernetes中通过subPath挂载子目录 | Life is different</title>
   
 
 
@@ -286,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/02/kubernetes中通过subPath挂载子目录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
@@ -303,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how to calculate page directory and page table size
+          <h1 class="post-title" itemprop="name headline">kubernetes中通过subPath挂载子目录
               
             
           </h1>
@@ -328,7 +330,7 @@
                 
               
 
-              <time title="创建时间：2018-04-08 12:59:44" itemprop="dateCreated datePublished" datetime="2018-04-08T12:59:44+08:00">2018-04-08</time>
+              <time title="创建时间：2019-08-02 14:14:20" itemprop="dateCreated datePublished" datetime="2019-08-02T14:14:20+08:00">2019-08-02</time>
             
 
             
@@ -343,8 +345,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="commentCount"></span>
+                <a href="/2019/08/02/kubernetes中通过subPath挂载子目录/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/08/02/kubernetes中通过subPath挂载子目录/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -372,21 +374,14 @@
       
 
       
-        <p>Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法：</p>
-<p>由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。</p>
-<p>每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。</p>
-<p>所以可以看到，它填充了4个页的页表。</p>
-<p>很明显4个页表，只需要页目录里的4项，就可以定位这些页表了。</p>
-<p>也可以这样计算：16KB，也就是2^14，(2^14/2^12) = 4。所以只占用了页目录表的前4项。</p>
-<p><img src="/images/page-directory-and-page-table.png" alt="page directory and page table"></p>
-<p>实际上，4KB大小的页目录表，已经能够寻址4GB的空间了。</p>
-<p>2^32 / 2^12 = 2^20</p>
-<p>每项4字节，也就是需要4MB的页表。</p>
-<p>为了寻址4MB的页表：2^22 / 2^12 = 1024，每个4字节，刚好页目录表是4KB。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html" target="_blank" rel="noopener">https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html</a></li>
-</ol>
+        <p>kubernetes支持很多种<a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Volume</a>，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被<a href="https://www.cnblogs.com/ssooking/p/5900664.html" target="_blank" rel="noopener">反弹Shell</a>之后，会存在安全隐患。我们可以通过subPath来解决这个问题。以hostPath类型的Volume为例，假设我们需要挂载/srv/aaa/bbb这个目录到/mnt/aaa/bbb，以及/srv/ccc/ddd目录到/mnt/ccc/ddd，而/srv下面的其他目录和文件，希望在容器中不可见，那么这样就可以做到：</p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    volumeMounts:</span></span><br><span class="line"><span class="attr">    - mountPath:</span> <span class="string">/mnt/aaa/bbb</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      subPath:</span> <span class="string">aaa/bbb</span></span><br><span class="line"><span class="attr">    - mountPath:</span> <span class="string">/mnt/ccc/ddd</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      subPath:</span> <span class="string">ccc/ddd</span></span><br><span class="line"><span class="attr">  volumes:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      hostPath:</span></span><br><span class="line"><span class="attr">        path:</span> <span class="string">/srv</span></span><br></pre></td></tr></table></figure>
+<p>启动容器之后，我们通过<code>kubectl exec -it nginx /bin/bash</code>连进去查看是否达到我们想要的效果。</p>
+<p><img src="/images/mnt-in-container.png" alt="/mnt in container"></p>
+<p>而在节点上的/srv是这样的：</p>
+<p><img src="/images/srv-in-node.png" alt="/srv in node"></p>
+<p>确实实现了只挂载特定子目录。</p>
 
       
     </div>
@@ -405,6 +400,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
+          
+        </div>
+      
 
       
       
@@ -414,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/02/read-time-from-rtc/" rel="next" title="read time from rtc">
-                <i class="fa fa-chevron-left"></i> read time from rtc
+              <a href="/2019/07/01/cpu-and-memory-limit-in-kubernetes/" rel="next" title="kubernetes中的容器cpu和内存限制">
+                <i class="fa fa-chevron-left"></i> kubernetes中的容器cpu和内存限制
               </a>
             
           </div>
@@ -423,10 +424,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/30/difference-of-start-and-main/" rel="prev" title="difference of _start and main">
-                difference of _start and main <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

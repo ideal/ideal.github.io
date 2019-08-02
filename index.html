@@ -281,6 +281,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/02/kubernetes中通过subPath挂载子目录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/02/kubernetes中通过subPath挂载子目录/" itemprop="url">
+                  kubernetes中通过subPath挂载子目录
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 14:14:20" itemprop="dateCreated datePublished" datetime="2019-08-02T14:14:20+08:00">2019-08-02</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/02/kubernetes中通过subPath挂载子目录/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/08/02/kubernetes中通过subPath挂载子目录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>kubernetes支持很多种<a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Volume</a>，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被<a href="https://www.cnblogs.com/ssooking/p/5900664.html" target="_blank" rel="noopener">反弹Shell</a>之后，会存在安全隐患。我们可以通过subPath来解决这个问题。以hostPath类型的Volume为例，假设我们需要挂载/srv/aaa/bbb这个目录到/mnt/aaa/bbb，以及/srv/ccc/ddd目录到/mnt/ccc/ddd，而/srv下面的其他目录和文件，希望在容器中不可见，那么这样就可以做到：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/02/kubernetes中通过subPath挂载子目录/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1533,7 +1683,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
