@@ -108,25 +108,28 @@
 
 
 
-  <meta name="description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
-<meta name="keywords" content="kubernetes">
+  <meta name="description" content="有些时候需要把命令行程序的日志在页面中展示，比如这种场景。通常日志里可能含有进度的展示，比如curl的输出，这种展示依赖于\r这种控制字符来起作用。遗憾的是如果直接作为html来输出，\r会被当作换行，导致进度变成了无数行，比如这里的样子（虽然可能也不是大问题）。另外终端里也会有很多依赖转义序列来实现的带色彩的输出，比如git log的输出。题外话，有时候stdout的类型，会影响这个特性，比如g">
+<meta name="keywords" content="node">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kubernetes中的容器cpu和内存限制">
-<meta property="og:url" content="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/index.html">
+<meta property="og:title" content="display command execute logs in html pages">
+<meta property="og:url" content="http://ideal.github.io/2019/08/04/display-command-execute-logs-in-html-pages/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
+<meta property="og:description" content="有些时候需要把命令行程序的日志在页面中展示，比如这种场景。通常日志里可能含有进度的展示，比如curl的输出，这种展示依赖于\r这种控制字符来起作用。遗憾的是如果直接作为html来输出，\r会被当作换行，导致进度变成了无数行，比如这里的样子（虽然可能也不是大问题）。另外终端里也会有很多依赖转义序列来实现的带色彩的输出，比如git log的输出。题外话，有时候stdout的类型，会影响这个特性，比如g">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ideal.github.io/images/progress-output.png">
+<meta property="og:image" content="http://ideal.github.io/images/log-display-example.png">
 <meta property="og:updated_time" content="2019-08-04T14:29:08.609Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kubernetes中的容器cpu和内存限制">
-<meta name="twitter:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
+<meta name="twitter:title" content="display command execute logs in html pages">
+<meta name="twitter:description" content="有些时候需要把命令行程序的日志在页面中展示，比如这种场景。通常日志里可能含有进度的展示，比如curl的输出，这种展示依赖于\r这种控制字符来起作用。遗憾的是如果直接作为html来输出，\r会被当作换行，导致进度变成了无数行，比如这里的样子（虽然可能也不是大问题）。另外终端里也会有很多依赖转义序列来实现的带色彩的输出，比如git log的输出。题外话，有时候stdout的类型，会影响这个特性，比如g">
+<meta name="twitter:image" content="http://ideal.github.io/images/progress-output.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/">
+  <link rel="canonical" href="http://ideal.github.io/2019/08/04/display-command-execute-logs-in-html-pages/">
 
 
 
@@ -136,7 +139,7 @@
   };
 </script>
 
-  <title>kubernetes中的容器cpu和内存限制 | Life is different</title>
+  <title>display command execute logs in html pages | Life is different</title>
   
 
 
@@ -285,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/07/01/cpu-and-memory-limit-in-kubernetes/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/04/display-command-execute-logs-in-html-pages/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
@@ -302,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">kubernetes中的容器cpu和内存限制
+          <h1 class="post-title" itemprop="name headline">display command execute logs in html pages
               
             
           </h1>
@@ -327,7 +330,7 @@
                 
               
 
-              <time title="创建时间：2019-07-01 15:28:48" itemprop="dateCreated datePublished" datetime="2019-07-01T15:28:48+08:00">2019-07-01</time>
+              <time title="创建时间：2019-08-04 21:45:29" itemprop="dateCreated datePublished" datetime="2019-08-04T21:45:29+08:00">2019-08-04</time>
             
 
             
@@ -342,8 +345,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/07/01/cpu-and-memory-limit-in-kubernetes/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/01/cpu-and-memory-limit-in-kubernetes/" itemprop="commentCount"></span>
+                <a href="/2019/08/04/display-command-execute-logs-in-html-pages/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/08/04/display-command-execute-logs-in-html-pages/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -371,25 +374,13 @@
       
 
       
-        <p>K8S部署容器时可以<a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/cpu-memory-limit/" target="_blank" rel="noopener">指定CPU和内存的资源限制</a>，其真正实现也是通过CGroups做到的。我们来看个例子：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    resources:</span></span><br><span class="line"><span class="attr">      limits:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">500</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">400</span><span class="string">Mi</span></span><br><span class="line"><span class="attr">      requests:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">200</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">200</span><span class="string">Mi</span></span><br></pre></td></tr></table></figure>
+        <p>有些时候需要把命令行程序的日志在页面中展示，比如<a href="https://travis-ci.org/python/mypy/jobs/565354133" target="_blank" rel="noopener">这种场景</a>。通常日志里可能含有进度的展示，比如curl的输出，这种展示依赖于\r这种<a href="https://en.wikipedia.org/wiki/Control_character" target="_blank" rel="noopener">控制字符</a>来起作用。遗憾的是如果直接作为html来输出，\r会被当作换行，导致进度变成了无数行，比如<a href="https://travis-ci.org/python/mypy/jobs/565354133#L514" target="_blank" rel="noopener">这里</a>的样子（虽然可能也不是大问题）。另外终端里也会有很多依赖<a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="noopener">转义序列</a>来实现的带色彩的输出，比如<code>git log</code>的输出。题外话，有时候stdout的类型，会影响这个特性，比如<code>git log | less</code>当加上了管道之后，彩色输出会消失。<a href="https://wiki.archlinux.org/index.php/Color_output_in_console#Reading_from_stdin" target="_blank" rel="noopener">这里</a>有一些绕过的方法。</p>
 <a id="more"></a>
-<p>limits表示指定资源的上限，requests表示创建容器时初始的资源请求。cpu的单位m表示1/1000核，比如这里的500m，其实表示0.5核心。如果不带单位，比如1或者1.0，则表示分配1核cpu。内存的单位可以是Mi、Gi，分别表示MB和GB。这里的设置就表示初始时cpu 0.2核，内存200M；上限cpu 0.5核，内存400M。</p>
-<p>首先来看cpu。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pod nginx -o=jsonpath=<span class="string">'&#123;.spec.containers[0].resources&#125;'</span></span><br><span class="line">map[limits:map[cpu:500m memory:400Mi] requests:map[cpu:200m memory:200Mi]]</span><br></pre></td></tr></table></figure>
-<p>可以看到确实设置了初始和上限。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps|grep nginx|grep -v pause|cut -d<span class="string">' '</span> -f1</span><br><span class="line">7ac3aef786af</span><br><span class="line"></span><br><span class="line">$ docker inspect 7ac3aef786af --format <span class="string">'&#123;&#123;.HostConfig.CpuShares&#125;&#125; &#123;&#123;.HostConfig.CpuQuota&#125;&#125; &#123;&#123;.HostConfig.CpuPeriod&#125;&#125;'</span></span><br><span class="line">204 50000 100000</span><br></pre></td></tr></table></figure>
-<p>我们看到这里返回CpuShares是204，而不是200。这是因为K8S以1000为单位，而Docker以1024为单位。0.2*1024 =204.8。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ps -ef|grep nginx</span><br><span class="line">docker    5522  5279  0 08:34 pts/0    00:00:00 grep nginx</span><br><span class="line">root     23814 23796  0 08:01 ?        00:00:00 nginx: master process nginx -g daemon off;</span><br><span class="line">101      23833 23814  0 08:01 ?        00:00:00 nginx: worker process</span><br><span class="line"></span><br><span class="line">$ cat /proc/23814/cgroup |grep cpuacct</span><br><span class="line">8:cpu,cpuacct:/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971</span><br><span class="line"></span><br><span class="line">$ cat cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.shares</span><br><span class="line">204</span><br></pre></td></tr></table></figure>
-<p>最终我们在<code>/sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.shares</code>找到了这个初始值。</p>
-<p>另外，HostConfig.CpuPeriod对应cpu.cfs_period_us，HostConfig.CpuQuota对应cpu.cfs_quota_us。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.cfs_period_us</span><br><span class="line">100000</span><br><span class="line"></span><br><span class="line">$ cat /sys/fs/cgroup/cpu,cpuacct/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/cpu.cfs_quota_us</span><br><span class="line">50000</span><br></pre></td></tr></table></figure>
-<p>这两个需要这样来换算。首先将单个核心cpu的带宽定义为0.1秒，也就是100000微秒。我们前面指定了上限500m，那么就是0.5*100000 = 5000微秒。这里的cpu.cfs_period_us也就是100000微秒。</p>
-<p>再来看内存的部分。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect 7ac3aef786af --format <span class="string">'&#123;&#123;.HostConfig.Memory&#125;&#125;'</span></span><br><span class="line">419430400</span><br></pre></td></tr></table></figure>
-<p>也就是我们设置的内存上限。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/23814/cgroup |grep memory</span><br><span class="line">6:memory:/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971</span><br><span class="line"></span><br><span class="line">$ cat /sys/fs/cgroup/memory/kubepods/burstable/pod6500174f-9bd6-11e9-9708-08002716449c/7ac3aef786af10a26528a0f805933ebfc5749223a2ed44f3e7fe49f20aa9b971/memory.limit_in_bytes</span><br><span class="line">419430400</span><br></pre></td></tr></table></figure>
-<p>可以看到和CGroups中对应的memory.limit_in_bytes是相同的，也就是内存限制通过CGroups实现的方式。</p>
+<p>回到正题，我们希望带有\r的输出，只保留最后的部分，像下面这样的效果：</p>
+<p><img src="/images/progress-output.png" alt="\r output"></p>
+<p>同时将转义序列的彩色输出，也转换成对应的html。</p>
+<p>尝试了好久，最终通过<a href="https://www.npmjs.com/package/clearr" target="_blank" rel="noopener">clearr</a>和<a href="https://www.npmjs.com/package/ansi-to-html" target="_blank" rel="noopener">ansi-to-html</a>这两个包可以比较好的做到，示例代码：</p>
+<p><img src="/images/log-display-example.png" alt="log display example"></p>
 
       
     </div>
@@ -410,7 +401,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
+            <a href="/tags/node/" rel="tag"># node</a>
           
         </div>
       
@@ -423,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/18/mysql-embedded-server-example/" rel="next" title="mysql embedded server example">
-                <i class="fa fa-chevron-left"></i> mysql embedded server example
+              <a href="/2019/08/02/kubernetes中通过subPath挂载子目录/" rel="next" title="kubernetes中通过subPath挂载子目录">
+                <i class="fa fa-chevron-left"></i> kubernetes中通过subPath挂载子目录
               </a>
             
           </div>
@@ -432,10 +423,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/02/kubernetes中通过subPath挂载子目录/" rel="prev" title="kubernetes中通过subPath挂载子目录">
-                kubernetes中通过subPath挂载子目录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

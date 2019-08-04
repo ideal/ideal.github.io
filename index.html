@@ -281,6 +281,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/04/display-command-execute-logs-in-html-pages/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/04/display-command-execute-logs-in-html-pages/" itemprop="url">
+                  display command execute logs in html pages
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-04 21:45:29" itemprop="dateCreated datePublished" datetime="2019-08-04T21:45:29+08:00">2019-08-04</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/04/display-command-execute-logs-in-html-pages/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/08/04/display-command-execute-logs-in-html-pages/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>有些时候需要把命令行程序的日志在页面中展示，比如<a href="https://travis-ci.org/python/mypy/jobs/565354133" target="_blank" rel="noopener">这种场景</a>。通常日志里可能含有进度的展示，比如curl的输出，这种展示依赖于\r这种<a href="https://en.wikipedia.org/wiki/Control_character" target="_blank" rel="noopener">控制字符</a>来起作用。遗憾的是如果直接作为html来输出，\r会被当作换行，导致进度变成了无数行，比如<a href="https://travis-ci.org/python/mypy/jobs/565354133#L514" target="_blank" rel="noopener">这里</a>的样子（虽然可能也不是大问题）。另外终端里也会有很多依赖<a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="noopener">转义序列</a>来实现的带色彩的输出，比如<code>git log</code>的输出。题外话，有时候stdout的类型，会影响这个特性，比如<code>git log | less</code>当加上了管道之后，彩色输出会消失。<a href="https://wiki.archlinux.org/index.php/Color_output_in_console#Reading_from_stdin" target="_blank" rel="noopener">这里</a>有一些绕过的方法。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/04/display-command-execute-logs-in-html-pages/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/02/kubernetes中通过subPath挂载子目录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1683,7 +1833,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1714,7 +1864,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
