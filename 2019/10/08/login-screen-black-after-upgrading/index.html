@@ -108,20 +108,27 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Life is different">
-<meta property="og:url" content="http://ideal.github.io/archives/2019/07/index.html">
+  <meta name="description" content="10.7号pacman -Syu了一把，重启发现手动编译的内核系统登录界面停在了启动图形系统，然后一直没反应。不过ALT-F2可以登录tty，然后执行systemctl status sddm发现sddm并没有启动X。如果手动启动X，会看到两个报错：12Internal error: Could not resolve keysym XF86MonBrightnessCycleInternal e">
+<meta name="keywords" content="archlinux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="login screen black after upgrading">
+<meta property="og:url" content="http://ideal.github.io/2019/10/08/login-screen-black-after-upgrading/index.html">
 <meta property="og:site_name" content="Life is different">
+<meta property="og:description" content="10.7号pacman -Syu了一把，重启发现手动编译的内核系统登录界面停在了启动图形系统，然后一直没反应。不过ALT-F2可以登录tty，然后执行systemctl status sddm发现sddm并没有启动X。如果手动启动X，会看到两个报错：12Internal error: Could not resolve keysym XF86MonBrightnessCycleInternal e">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ideal.github.io/images/archlinux-sddm-log.png">
+<meta property="og:updated_time" content="2019-10-08T13:51:49.605Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Life is different">
+<meta name="twitter:title" content="login screen black after upgrading">
+<meta name="twitter:description" content="10.7号pacman -Syu了一把，重启发现手动编译的内核系统登录界面停在了启动图形系统，然后一直没反应。不过ALT-F2可以登录tty，然后执行systemctl status sddm发现sddm并没有启动X。如果手动启动X，会看到两个报错：12Internal error: Could not resolve keysym XF86MonBrightnessCycleInternal e">
+<meta name="twitter:image" content="http://ideal.github.io/images/archlinux-sddm-log.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/archives/2019/07/">
+  <link rel="canonical" href="http://ideal.github.io/2019/10/08/login-screen-black-after-upgrading/">
 
 
 
@@ -131,7 +138,7 @@
   };
 </script>
 
-  <title>归档 | Life is different</title>
+  <title>login screen black after upgrading | Life is different</title>
   
 
 
@@ -178,7 +185,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,7 +234,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -239,19 +246,6 @@
 
   
     
-
-    
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
 
   
 
@@ -277,78 +271,183 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 11 篇日志。 继续努力。
-      </span>
-      
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
-
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/08/login-screen-black-after-upgrading/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/07/01/cpu-and-memory-limit-in-kubernetes/" itemprop="url">
-              
-                <span itemprop="name">kubernetes中的容器cpu和内存限制</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">login screen black after upgrading
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-01T15:28:48+08:00" content="2019-07-01">
-          07-01
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
+              
+                
+              
+
+              <time title="创建时间：2019-10-08 21:29:57" itemprop="dateCreated datePublished" datetime="2019-10-08T21:29:57+08:00">2019-10-08</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/08/login-screen-black-after-upgrading/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/08/login-screen-black-after-upgrading/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <p>10.7号<code>pacman -Syu</code>了一把，重启发现手动编译的内核系统登录界面停在了启动图形系统，然后一直没反应。不过ALT-F2可以登录tty，然后执行<code>systemctl status sddm</code>发现sddm并没有启动X。如果手动启动X，会看到两个报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Internal error: Could not resolve keysym XF86MonBrightnessCycle</span><br><span class="line">Internal error: Could not resolve keysym XF86RotationLockToggle</span><br></pre></td></tr></table></figure></p>
+<p>不过这两个报错并不会影响X的功能。X启动之后依然黑屏。</p>
+<p>切换到archlinux自带的内核，却又没问题。sddm最近也没有更新过。KDE倒是进行了大更新。由于只剩下内核的差异（手动编译的内核只是增加了CONFIG_DEBUG_INFO=y），于是我将archlinux内核新的config文件复制一份，重新编译了4.18.12，然而重启依然黑屏。</p>
+<p><code>sudo journal -u -e sddm</code>可以看到黑屏的情况，缺少了Adding new display on vt1。</p>
+<p><img src="/images/archlinux-sddm-log.png" alt="sddm log"></p>
+<p>还未解决。。</p>
+
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/archlinux/" rel="tag"># archlinux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/04/display-command-execute-logs-in-html-pages/" rel="next" title="display command execute logs in html pages">
+                <i class="fa fa-chevron-left"></i> display command execute logs in html pages
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -584,6 +683,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 

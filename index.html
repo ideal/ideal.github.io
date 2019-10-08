@@ -281,6 +281,157 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/08/login-screen-black-after-upgrading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/08/login-screen-black-after-upgrading/" itemprop="url">
+                  login screen black after upgrading
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-08 21:29:57" itemprop="dateCreated datePublished" datetime="2019-10-08T21:29:57+08:00">2019-10-08</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/08/login-screen-black-after-upgrading/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/08/login-screen-black-after-upgrading/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>10.7号<code>pacman -Syu</code>了一把，重启发现手动编译的内核系统登录界面停在了启动图形系统，然后一直没反应。不过ALT-F2可以登录tty，然后执行<code>systemctl status sddm</code>发现sddm并没有启动X。如果手动启动X，会看到两个报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Internal error: Could not resolve keysym XF86MonBrightnessCycle</span><br><span class="line">Internal error: Could not resolve keysym XF86RotationLockToggle</span><br></pre></td></tr></table></figure></p>
+<p>不过这两个报错并不会影响X的功能。X启动之后依然黑屏。</p>
+<p>切换到archlinux自带的内核，却又没问题。sddm最近也没有更新过。KDE倒是进行了大更新。由于只剩下内核的差异（手动编译的内核只是增加了CONFIG_DEBUG_INFO=y），于是我将archlinux内核新的config文件复制一份，重新编译了4.18.12，然而重启依然黑屏。</p>
+<p><code>sudo journal -u -e sddm</code>可以看到黑屏的情况，缺少了Adding new display on vt1。</p>
+<p><img src="/images/archlinux-sddm-log.png" alt="sddm log"></p>
+<p>还未解决。。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/08/04/display-command-execute-logs-in-html-pages/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1637,162 +1788,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/02/02/read-time-from-rtc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Life is different">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/02/read-time-from-rtc/" itemprop="url">
-                  read time from rtc
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-02 16:39:48" itemprop="dateCreated datePublished" datetime="2018-02-02T16:39:48+08:00">2018-02-02</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/02/read-time-from-rtc/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/02/02/read-time-from-rtc/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://read.douban.com/ebook/15160895/" target="_blank" rel="noopener">这本书</a>里提到，在内核初始化的过程中，会通过内联汇编从RTC读取当前时间。大概逻辑是：通过汇编，分别读取当前秒、当前分钟、当前小时等。每次读取，先针对IO端口0x70设置读取的寄存器，然后从0x71读出相应的字节。再进行一定的转换。然后调用kernel_mktime()得到一个unix时间戳。</p>
-<p>至于为什么是0x70，<a href="https://wiki.osdev.org/CMOS" target="_blank" rel="noopener">这里</a>有相关的说明。通过<code>/proc/ioports</code>也可以看到。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat /proc/ioports</span></span><br><span class="line">0000-0cf7 : PCI Bus 0000:00</span><br><span class="line">    0000-001f : dma1</span><br><span class="line">    0020-0021 : pic1</span><br><span class="line">    0040-0043 : timer0</span><br><span class="line">    0050-0053 : timer1</span><br><span class="line">    0060-0060 : keyboard</span><br><span class="line">    0064-0064 : keyboard</span><br><span class="line">    0070-0077 : rtc0</span><br></pre></td></tr></table></figure>
-<p>RTC对应的IO端口地址正是0x70~0x77。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/02/read-time-from-rtc/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1833,7 +1835,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1866,7 +1868,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
