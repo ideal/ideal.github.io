@@ -123,7 +123,7 @@ class AaaaController extends ControllerBase
 }
 ```
 
-访问`http://localhost:8000/aaaa/bbbb`，会发现我们通过config.json配置里的script把所有请求都指向了index.php，但此时代码里的路由机制并没有识别到我们的访问路径`/aaaa/bbbb`。实际上Phalcon默认需要一个_url的参数，这在Nginx+PHP-FPM的方式下，很容易通过rewrite解决，可以参考[https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration](https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration)。然而Unit目前还不能做那样的rewrite，我们可以用过更改Phalcon里面router的行为，在config/services.php增加一行代码来解决：
+访问`http://localhost:8000/aaaa/bbbb`，发现返回的还是首页的内容。虽然我们通过config.json配置里的script把所有请求都指向了index.php，但此时代码里的路由机制并没有识别到我们的访问路径`/aaaa/bbbb`。实际上Phalcon默认需要一个_url的参数，这在Nginx+PHP-FPM的方式下，很容易通过rewrite解决，可以参考[https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration](https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration)。然而Unit目前还不能做那样的rewrite，我们可以用过更改Phalcon里面router的行为，在config/services.php增加一行代码来解决：
 
 ```diff
 --- a/multiple-volt/config/services.php
