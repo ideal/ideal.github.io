@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前几天发现NGINX又搞了个Unit，简单来说是一个web应用容器，特点是可以通过RESTful风格的API进行动态配置（不需要NGINX那样该配置然后重启），并且支持Python、Go、PHP、Java等等一大堆语言。不知道是不是受了Passenger的启发。 这里记录一下试用的笔记。 安装ArchLinux可以通过PKGBUILD安装，makepkg之后sudo pacman -U *.xz即">
+<meta name="keywords" content="unit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx unit introduction">
+<meta property="og:url" content="http://ideal.github.io/2019/10/17/nginx-unit-introduction/index.html">
+<meta property="og:site_name" content="Life is different">
+<meta property="og:description" content="前几天发现NGINX又搞了个Unit，简单来说是一个web应用容器，特点是可以通过RESTful风格的API进行动态配置（不需要NGINX那样该配置然后重启），并且支持Python、Go、PHP、Java等等一大堆语言。不知道是不是受了Passenger的启发。 这里记录一下试用的笔记。 安装ArchLinux可以通过PKGBUILD安装，makepkg之后sudo pacman -U *.xz即">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ideal.github.io/images/nginx-unit-config.png">
+<meta property="og:image" content="http://ideal.github.io/images/nginx-unit-access.png">
+<meta property="og:image" content="http://ideal.github.io/images/nginx-unit-access-custom.png">
+<meta property="og:updated_time" content="2019-10-17T12:06:21.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx unit introduction">
+<meta name="twitter:description" content="前几天发现NGINX又搞了个Unit，简单来说是一个web应用容器，特点是可以通过RESTful风格的API进行动态配置（不需要NGINX那样该配置然后重启），并且支持Python、Go、PHP、Java等等一大堆语言。不知道是不是受了Passenger的启发。 这里记录一下试用的笔记。 安装ArchLinux可以通过PKGBUILD安装，makepkg之后sudo pacman -U *.xz即">
+<meta name="twitter:image" content="http://ideal.github.io/images/nginx-unit-config.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://ideal.github.io/2019/10/17/nginx-unit-introduction/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>nginx unit introduction | Life is different</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Life is different</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">ideal's blog</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/17/nginx-unit-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx unit introduction
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-17 17:43:39" itemprop="dateCreated datePublished" datetime="2019-10-17T17:43:39+08:00">2019-10-17</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/17/nginx-unit-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/17/nginx-unit-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前几天发现NGINX又搞了个<a href="https://unit.nginx.org/" target="_blank" rel="noopener">Unit</a>，简单来说是一个web应用容器，特点是可以通过RESTful风格的API进行动态配置（不需要NGINX那样该配置然后重启），并且支持Python、Go、PHP、Java等等一大堆语言。不知道是不是受了<a href="https://www.phusionpassenger.com/docs/tutorials/what_is_passenger/" target="_blank" rel="noopener">Passenger</a>的启发。</p>
+<p>这里记录一下试用的笔记。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>ArchLinux可以通过<a href="https://aur.archlinux.org/packages/nginx-unitd" target="_blank" rel="noopener">PKGBUILD</a>安装，<code>makepkg</code>之后<code>sudo pacman -U *.xz</code>即可。</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>执行<code>sudo systemctl start unit</code>即可。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>写一个config.json，内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"listeners"</span>: &#123;</span><br><span class="line">        <span class="attr">"*:8000"</span>: &#123;</span><br><span class="line">            <span class="attr">"pass"</span>: <span class="string">"applications/phalcon-test"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"applications"</span>: &#123;</span><br><span class="line">        <span class="attr">"phalcon-test"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"php"</span>,</span><br><span class="line">            <span class="attr">"processes"</span>: <span class="number">5</span>,</span><br><span class="line">            <span class="attr">"user"</span>: <span class="string">"vagrant"</span>,</span><br><span class="line">            <span class="attr">"group"</span>: <span class="string">"vagrant"</span>,</span><br><span class="line">            <span class="attr">"script"</span>: <span class="string">"index.php"</span>,</span><br><span class="line">            <span class="attr">"root"</span>: <span class="string">"/home/vagrant/project/mvc/multiple-volt/public"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"routes"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"action"</span>: &#123;</span><br><span class="line">                <span class="attr">"pass"</span>: <span class="string">"applications/phalcon-test"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>表示启动一个PHP类型的应用，并让Unit监听8000端口，将所有请求抛给那个PHP应用。</p>
+<a id="more"></a>
+<p>这里使用Phalcon的<a href="https://github.com/phalcon/mvc" target="_blank" rel="noopener">示例工程</a>里面的<code>multiple-volt</code>作为应用示例。</p>
+<p>执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curlie -X PUT --data-binary @config.json --unix-socket /run/nginx-unit.control.sock http://localhost/config/</span><br></pre></td></tr></table></figure>
+<p>让Unix应用这个配置。不过默认会提示无法连接，这是由于/run/nginx-unit.control.sock的所属用户是root，要么改下它的用户（sudo chown vagrant:vagrant /run/nginx-unit.control.sock），要么通过sudo进行访问。</p>
+<p>不过一开始我发现Unix返回提示<code>Unknown parameter &quot;pass&quot;</code>，但是它的文档就是一模一样类似配置的啊，查了一圈，又翻了下源代码，发现是AUR上面的PKGBUILD里面指定的Unit的版本太低了，这个倒好说，改下PKGBUILD，升级到1.12.0，重新makepkg然后安装。</p>
+<p><img src="/images/nginx-unit-config.png" alt="unit config"></p>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http localhost:8000</span><br></pre></td></tr></table></figure>
+<p><img src="/images/nginx-unit-access.png" alt="unit access"></p>
+<p>尝试改下首页：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/multiple-volt/apps/frontend/controllers/IndexController.php b/multiple-volt/apps/frontend/controllers/IndexController.php</span><br><span class="line">index a8502dc..8580675 100644</span><br><span class="line"><span class="comment">--- a/multiple-volt/apps/frontend/controllers/IndexController.php</span></span><br><span class="line"><span class="comment">+++ b/multiple-volt/apps/frontend/controllers/IndexController.php</span></span><br><span class="line">@@ -6,5 +6,6 @@ class IndexController extends ControllerBase</span><br><span class="line"> &#123;</span><br><span class="line">     public function indexAction()</span><br><span class="line">     &#123;</span><br><span class="line"><span class="addition">+        $this-&gt;view-&gt;hello = "world &lt;script&gt;";</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line">diff --git a/multiple-volt/apps/frontend/views/index/index.volt b/multiple-volt/apps/frontend/views/index/index.volt</span><br><span class="line">index 461223d..af590f9 100644</span><br><span class="line"><span class="comment">--- a/multiple-volt/apps/frontend/views/index/index.volt</span></span><br><span class="line"><span class="comment">+++ b/multiple-volt/apps/frontend/views/index/index.volt</span></span><br><span class="line"><span class="meta">@@ -1,3 +1,5 @@</span></span><br><span class="line"> &lt;h1&gt;Congratulations!&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line"><span class="deletion">-&lt;p&gt;You're now flying with Phalcon. Great things are about to happen!&lt;/p&gt;</span></span><br><span class="line">\ No newline at end of file</span><br><span class="line"><span class="addition">+&lt;p&gt;You're now flying with Phalcon. Great things are about to happen!&lt;/p&gt;</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+&lt;p&gt;&#123;&#123; hello | e &#125;&#125;&lt;/p&gt;</span></span><br></pre></td></tr></table></figure>
+<p>再次访问就能看到效果。</p>
+<p>如果增加新的controller和action呢？我们增加一个apps/frontend/controllers/AaaaController.php。内容如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Multiple</span>\<span class="title">Frontend</span>\<span class="title">Controllers</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AaaaController</span> <span class="keyword">extends</span> <span class="title">ControllerBase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">bbbbAction</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;view-&gt;disable();</span><br><span class="line">        var_dump(<span class="string">"1234"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问<code>http://localhost:8000/aaaa/bbbb</code>，会发现我们通过config.json配置里的script把所有请求都指向了index.php，但此时代码里的路由机制并没有识别到我们的访问路径<code>/aaaa/bbbb</code>。实际上Phalcon默认需要一个_url的参数，这在Nginx+PHP-FPM的方式下，很容易通过rewrite解决，可以参考<a href="https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration" target="_blank" rel="noopener">https://docs.phalcon.io/4.0/en/webserver-setup#phalcon-configuration</a>。然而Unit目前还不能做那样的rewrite，我们可以用过更改Phalcon里面router的行为，在config/services.php增加一行代码来解决：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--- a/multiple-volt/config/services.php</span></span><br><span class="line"><span class="comment">+++ b/multiple-volt/config/services.php</span></span><br><span class="line">@@ -25,6 +25,8 @@ $di["router"] = function () &#123;</span><br><span class="line"></span><br><span class="line">     $router-&gt;setDefaultNamespace("Multiple\Frontend\Controllers");</span><br><span class="line"></span><br><span class="line"><span class="addition">+    $router-&gt;setUriSource($router::URI_SOURCE_SERVER_REQUEST_URI);</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line">     return $router;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<p>参考自<a href="https://forum.phalcon.io/discussion/9239/problem-with-get-on-nginx config/services.php" target="_blank" rel="noopener">这里</a> ，目的是让Phalcon通过REQUEST_URI来识别路由，而不是_url。</p>
+<p>这样就可以了：</p>
+<p><img src="/images/nginx-unit-access-custom.png" alt="unit access custom"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/unit/" rel="tag"># unit</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/08/login-screen-black-after-upgrading/" rel="next" title="login screen black after upgrading">
+                <i class="fa fa-chevron-left"></i> login screen black after upgrading
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"><a href="https://github.com/ideal">ideal</a></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ideal" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/idealities" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问"><span class="nav-number">4.</span> <span class="nav-text">访问</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a href="https://github.com/ideal">ideal</a></span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'qn6yKlVOCoD4lqhtJrDPvTT3-gzGzoHsz',
+        appKey: '8kU5of34PXpb4OkWxucxboxg',
+        placeholder: 'Write a comment',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

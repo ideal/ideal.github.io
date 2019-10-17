@@ -281,6 +281,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/17/nginx-unit-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/17/nginx-unit-introduction/" itemprop="url">
+                  nginx unit introduction
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-17 17:43:39" itemprop="dateCreated datePublished" datetime="2019-10-17T17:43:39+08:00">2019-10-17</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/17/nginx-unit-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/17/nginx-unit-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>前几天发现NGINX又搞了个<a href="https://unit.nginx.org/" target="_blank" rel="noopener">Unit</a>，简单来说是一个web应用容器，特点是可以通过RESTful风格的API进行动态配置（不需要NGINX那样该配置然后重启），并且支持Python、Go、PHP、Java等等一大堆语言。不知道是不是受了<a href="https://www.phusionpassenger.com/docs/tutorials/what_is_passenger/" target="_blank" rel="noopener">Passenger</a>的启发。</p>
+<p>这里记录一下试用的笔记。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>ArchLinux可以通过<a href="https://aur.archlinux.org/packages/nginx-unitd" target="_blank" rel="noopener">PKGBUILD</a>安装，<code>makepkg</code>之后<code>sudo pacman -U *.xz</code>即可。</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>执行<code>sudo systemctl start unit</code>即可。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>写一个config.json，内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"listeners"</span>: &#123;</span><br><span class="line">        <span class="attr">"*:8000"</span>: &#123;</span><br><span class="line">            <span class="attr">"pass"</span>: <span class="string">"applications/phalcon-test"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"applications"</span>: &#123;</span><br><span class="line">        <span class="attr">"phalcon-test"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"php"</span>,</span><br><span class="line">            <span class="attr">"processes"</span>: <span class="number">5</span>,</span><br><span class="line">            <span class="attr">"user"</span>: <span class="string">"vagrant"</span>,</span><br><span class="line">            <span class="attr">"group"</span>: <span class="string">"vagrant"</span>,</span><br><span class="line">            <span class="attr">"script"</span>: <span class="string">"index.php"</span>,</span><br><span class="line">            <span class="attr">"root"</span>: <span class="string">"/home/vagrant/project/mvc/multiple-volt/public"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"routes"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"action"</span>: &#123;</span><br><span class="line">                <span class="attr">"pass"</span>: <span class="string">"applications/phalcon-test"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>表示启动一个PHP类型的应用，并让Unit监听8000端口，将所有请求抛给那个PHP应用。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/17/nginx-unit-introduction/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/08/login-screen-black-after-upgrading/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1628,166 +1784,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Life is different">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="url">
-                  how to calculate page directory and page table size
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-04-08 12:59:44" itemprop="dateCreated datePublished" datetime="2018-04-08T12:59:44+08:00">2018-04-08</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法：</p>
-<p>由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。</p>
-<p>每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。</p>
-<p>所以可以看到，它填充了4个页的页表。</p>
-<p>很明显4个页表，只需要页目录里的4项，就可以定位这些页表了。</p>
-<p>也可以这样计算：16KB，也就是2^14，(2^14/2^12) = 4。所以只占用了页目录表的前4项。</p>
-<p><img src="/images/page-directory-and-page-table.png" alt="page directory and page table"></p>
-<p>实际上，4KB大小的页目录表，已经能够寻址4GB的空间了。</p>
-<p>2^32 / 2^12 = 2^20</p>
-<p>每项4字节，也就是需要4MB的页表。</p>
-<p>为了寻址4MB的页表：2^22 / 2^12 = 1024，每个4字节，刚好页目录表是4KB。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html" target="_blank" rel="noopener">https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1835,7 +1831,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1870,7 +1866,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
