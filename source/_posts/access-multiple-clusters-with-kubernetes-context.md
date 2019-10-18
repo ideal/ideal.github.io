@@ -1,5 +1,5 @@
 ---
-title: access multiple clusters with kuberneter context
+title: access multiple clusters with kubernetes context
 date: 2019-10-18 16:02:59
 tags:
 	- kubernetes
