@@ -281,6 +281,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/18/access-multiple-clusters-with-kuberneter-context/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Life is different">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/18/access-multiple-clusters-with-kuberneter-context/" itemprop="url">
+                  access multiple clusters with kuberneter context
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-18 16:02:59" itemprop="dateCreated datePublished" datetime="2019-10-18T16:02:59+08:00">2019-10-18</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/18/access-multiple-clusters-with-kuberneter-context/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/18/access-multiple-clusters-with-kuberneter-context/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>有时候往往需要和多个Kubernetes集群交互，我之前一直是每个集群一个config文件，然后通过<code>cp ~/.kube/config.xxxx ~/.kube/config</code>这样来切换🤦‍♂️。</p>
+<p>其实通过Kubernetes的<a href="https://kubernetes.io/zh/docs/tasks/access-application-cluster/configure-access-multiple-clusters/" target="_blank" rel="noopener">Context</a>，就不用这么麻烦了。不过按照文档操作有点繁琐，其实自己编辑<code>~/.kube/config</code>就行了，不过记得先备份一下。就是把其他集群的cluster、user、context分别添加一份到<code>~/.kube/config</code>，注意改下名字之类。</p>
+<p>之后就可以这样<code>kubectl config use-context minikube</code>来切换context了。执行<code>kubectl config current-context</code>可以显示当前的context。但是这个命令还是太长了，不友好。可以安装<a href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener">kubectx</a>，支持交互式操作来选择并切换context和namespace。在macOS只要执行<code>brew install kubectx</code>就能安装了。</p>
+<p>下面是执行<code>kubectx</code>的效果：</p>
+<p><img src="/images/kubectx.png" alt="kubectx"></p>
+<p>同样，执行<code>kubens</code>可以列出当前context指定集群的可用namespace，然后通过方向键选择。之后执行<code>kubectl get pod</code>就不用指定<code>--context=xxx -n=yyy</code>来操作了。</p>
+<p>更进一步，由于kubectl支持插件机制，我们只要执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/bin/kubectx /usr/local/bin/kubectl-ctx</span><br><span class="line">ln -s /usr/local/bin/kubens /usr/local/bin/kubectl-ns</span><br></pre></td></tr></table></figure>
+<p>然后只要运行<code>kubectl ctx</code>和<code>kubectl ns</code>就行了，不需要再敲kubectx和kubens。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2019/10/17/nginx-unit-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1633,157 +1787,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/09/30/difference-of-start-and-main/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Life is different">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/30/difference-of-start-and-main/" itemprop="url">
-                  difference of _start and main
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-09-30 11:30:47" itemprop="dateCreated datePublished" datetime="2018-09-30T11:30:47+08:00">2018-09-30</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/30/difference-of-start-and-main/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/09/30/difference-of-start-and-main/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>如果使用gcc编译，并且链接了C的标准库（crti.o, crt1.o以及libc等），那么此时和编译普通的C程序一样，需要提供一个main的符号。（crt1.o里面有_start，_start会调用__libc_start_main，再调用main）。例如：</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># example.s</span><br><span class="line"></span><br><span class="line"><span class="meta">    .text</span></span><br><span class="line"><span class="meta">    .global</span> main</span><br><span class="line"><span class="symbol">main:</span></span><br><span class="line">    pushq  %rbp</span><br><span class="line">    <span class="keyword">movq</span>   %rsp, %rbp</span><br><span class="line"></span><br><span class="line">    <span class="keyword">movq</span>  $file, %rdi</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$59</span>, %rax    # 系统调用号，来自/usr/include/asm/unistd_64.h</span><br><span class="line"></span><br><span class="line">    pushq <span class="number">$0</span></span><br><span class="line">    pushq %rdi</span><br><span class="line">    <span class="keyword">movq</span>  %rsp, %rsi   # 构造一个execve()需要的argv参数</span><br><span class="line">    <span class="keyword">movq</span>  <span class="number">$0</span>, %rdx</span><br><span class="line">    <span class="keyword">syscall</span></span><br><span class="line"></span><br><span class="line">    movl <span class="number">$0</span>, %eax</span><br><span class="line">    <span class="keyword">leave</span></span><br><span class="line">    <span class="keyword">ret</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">file:</span> .string  <span class="string">"/bin/ps"</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/30/difference-of-start-and-main/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1831,7 +1834,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
