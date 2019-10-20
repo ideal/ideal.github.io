@@ -375,7 +375,7 @@
           
             <p>有时候往往需要和多个Kubernetes集群交互，我之前一直是每个集群一个config文件，然后通过<code>cp ~/.kube/config.xxxx ~/.kube/config</code>这样来切换🤦‍♂️。</p>
 <p>其实通过Kubernetes的<a href="https://kubernetes.io/zh/docs/tasks/access-application-cluster/configure-access-multiple-clusters/" target="_blank" rel="noopener">Context</a>，就不用这么麻烦了。不过按照文档操作有点繁琐，其实自己编辑<code>~/.kube/config</code>就行了，不过记得先备份一下。就是把其他集群的cluster、user、context分别添加一份到<code>~/.kube/config</code>，注意改下名字之类。</p>
-<p>之后就可以这样<code>kubectl config use-context minikube</code>来切换context了。执行<code>kubectl config current-context</code>可以显示当前的context。但是这个命令还是太长了，不友好。可以安装<a href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener">kubectx</a>，支持交互式操作来选择并切换context和namespace。在macOS只要执行<code>brew install kubectx</code>就能安装了。</p>
+<p>之后就可以这样<code>kubectl config use-context minikube</code>来切换context为minikube了。执行<code>kubectl config current-context</code>可以显示当前的context。但是这个命令还是太长了，不友好。可以安装<a href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener">kubectx</a>，支持交互式操作（配合<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">fzf</a>）来选择并切换context和namespace。在macOS只要执行<code>brew install kubectx</code>就能安装了。</p>
 <p>下面是执行<code>kubectx</code>的效果：</p>
 <p><img src="/images/kubectx.png" alt="kubectx"></p>
 <p>同样，执行<code>kubens</code>可以列出当前context指定集群的可用namespace，然后通过方向键选择。之后执行<code>kubectl get pod</code>就不用指定<code>--context=xxx -n=yyy</code>来操作了。</p>
