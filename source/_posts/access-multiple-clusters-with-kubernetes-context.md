@@ -9,7 +9,7 @@ tags:
 
 其实通过Kubernetes的[Context](https://kubernetes.io/zh/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)，就不用这么麻烦了。不过按照文档操作有点繁琐，其实自己编辑`~/.kube/config`就行了，不过记得先备份一下。就是把其他集群的cluster、user、context分别添加一份到`~/.kube/config`，注意改下名字之类。
 
-之后就可以这样`kubectl config use-context minikube`来切换context了。执行`kubectl config current-context`可以显示当前的context。但是这个命令还是太长了，不友好。可以安装[kubectx](https://github.com/ahmetb/kubectx)，支持交互式操作来选择并切换context和namespace。在macOS只要执行`brew install kubectx`就能安装了。
+之后就可以这样`kubectl config use-context minikube`来切换context为minikube了。执行`kubectl config current-context`可以显示当前的context。但是这个命令还是太长了，不友好。可以安装[kubectx](https://github.com/ahmetb/kubectx)，支持交互式操作（配合[fzf](https://github.com/junegunn/fzf)）来选择并切换context和namespace。在macOS只要执行`brew install kubectx`就能安装了。
 
 下面是执行`kubectx`的效果：
 
