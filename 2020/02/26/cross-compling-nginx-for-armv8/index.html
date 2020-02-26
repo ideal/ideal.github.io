@@ -108,26 +108,28 @@
 
 
 
-  <meta name="description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+  <meta name="description" content="首先我们需要一个工具链，目前有很多可以选择，此处我们选择Linaro，这是一种预先构建好的工具链。甚至也可以通过工具构建一个工具链，比如Buildroot，但此处我们不需要那么复杂。 其次按照自己的需求从这里来选择一个工具链下载，比如我期望将Nginx运行在NanoPI Neo2上面，处理器属于ARMv8，其上运行的系统是基于Ubuntu Core构建（使用glibc），所以我应该选择aarch6">
+<meta name="keywords" content="cross compiling">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how to calculate page directory and page table size">
-<meta property="og:url" content="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/index.html">
+<meta property="og:title" content="cross compling Nginx for ARMv8">
+<meta property="og:url" content="http://ideal.github.io/2020/02/26/cross-compling-nginx-for-armv8/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
+<meta property="og:description" content="首先我们需要一个工具链，目前有很多可以选择，此处我们选择Linaro，这是一种预先构建好的工具链。甚至也可以通过工具构建一个工具链，比如Buildroot，但此处我们不需要那么复杂。 其次按照自己的需求从这里来选择一个工具链下载，比如我期望将Nginx运行在NanoPI Neo2上面，处理器属于ARMv8，其上运行的系统是基于Ubuntu Core构建（使用glibc），所以我应该选择aarch6">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta property="og:image" content="http://ideal.github.io/images/file-nginx.png">
+<meta property="og:image" content="http://ideal.github.io/images/nginx-running.png">
 <meta property="og:updated_time" content="2020-02-26T07:46:43.775Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how to calculate page directory and page table size">
-<meta name="twitter:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
-<meta name="twitter:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta name="twitter:title" content="cross compling Nginx for ARMv8">
+<meta name="twitter:description" content="首先我们需要一个工具链，目前有很多可以选择，此处我们选择Linaro，这是一种预先构建好的工具链。甚至也可以通过工具构建一个工具链，比如Buildroot，但此处我们不需要那么复杂。 其次按照自己的需求从这里来选择一个工具链下载，比如我期望将Nginx运行在NanoPI Neo2上面，处理器属于ARMv8，其上运行的系统是基于Ubuntu Core构建（使用glibc），所以我应该选择aarch6">
+<meta name="twitter:image" content="http://ideal.github.io/images/file-nginx.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+  <link rel="canonical" href="http://ideal.github.io/2020/02/26/cross-compling-nginx-for-armv8/">
 
 
 
@@ -137,7 +139,7 @@
   };
 </script>
 
-  <title>how to calculate page directory and page table size | Life is different</title>
+  <title>cross compling Nginx for ARMv8 | Life is different</title>
   
 
 
@@ -286,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2020/02/26/cross-compling-nginx-for-armv8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
@@ -303,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how to calculate page directory and page table size
+          <h1 class="post-title" itemprop="name headline">cross compling Nginx for ARMv8
               
             
           </h1>
@@ -328,7 +330,7 @@
                 
               
 
-              <time title="创建时间：2018-04-08 12:59:44" itemprop="dateCreated datePublished" datetime="2018-04-08T12:59:44+08:00">2018-04-08</time>
+              <time title="创建时间：2020-02-26 15:39:27" itemprop="dateCreated datePublished" datetime="2020-02-26T15:39:27+08:00">2020-02-26</time>
             
 
             
@@ -343,8 +345,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="commentCount"></span>
+                <a href="/2020/02/26/cross-compling-nginx-for-armv8/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/02/26/cross-compling-nginx-for-armv8/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -372,21 +374,20 @@
       
 
       
-        <p>Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法：</p>
-<p>由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。</p>
-<p>每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。</p>
-<p>所以可以看到，它填充了4个页的页表。</p>
-<p>很明显4个页表，只需要页目录里的4项，就可以定位这些页表了。</p>
-<p>也可以这样计算：16KB，也就是2^14，(2^14/2^12) = 4。所以只占用了页目录表的前4项。</p>
-<p><img src="/images/page-directory-and-page-table.png" alt="page directory and page table"></p>
-<p>实际上，4KB大小的页目录表，已经能够寻址4GB的空间了。</p>
-<p>2^32 / 2^12 = 2^20</p>
-<p>每项4字节，也就是需要4MB的页表。</p>
-<p>为了寻址4MB的页表：2^22 / 2^12 = 1024，每个4字节，刚好页目录表是4KB。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html" target="_blank" rel="noopener">https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html</a></li>
-</ol>
+        <p>首先我们需要一个工具链，目前有很多可以选择，此处我们选择<a href="https://www.linaro.org/" target="_blank" rel="noopener">Linaro</a>，这是一种预先构建好的工具链。甚至也可以通过工具构建一个工具链，比如<a href="https://buildroot.org/" target="_blank" rel="noopener">Buildroot</a>，但此处我们不需要那么复杂。</p>
+<p>其次按照自己的需求从<a href="https://www.linaro.org/downloads/" target="_blank" rel="noopener">这里</a>来选择一个工具链下载，比如我期望将Nginx运行在<a href="http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO2/zh#.E5.AE.89.E8.A3.85.E7.B3.BB.E7.BB.9F" target="_blank" rel="noopener">NanoPI Neo2</a>上面，处理器属于ARMv8，其上运行的系统是基于Ubuntu Core构建（使用glibc），所以我应该选择aarch64-linux-gnu。这个三项代表cpu-vendor-os，在<a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/Specifying-Target-Triplets.html" target="_blank" rel="noopener">这里</a>有说明。</p>
+<p>另外要注意具体的工具链版本，比如这个版本 <a href="https://releases.linaro.org/components/toolchain/binaries/latest-7/" target="_blank" rel="noopener">https://releases.linaro.org/components/toolchain/binaries/latest-7/</a> 里面提到glibc是2.25，但是我那个系统里面的glibc版本并没有这么高，如果用这个来编译，再放到我的NanoPI Neo2里面去运行，会导致运行时GLIBC_2.25符号找不到的错误。所以这里我选择<a href="https://releases.linaro.org/components/toolchain/binaries/6.5-2018.12/aarch64-linux-gnu/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu.tar.xz" target="_blank" rel="noopener">https://releases.linaro.org/components/toolchain/binaries/6.5-2018.12/aarch64-linux-gnu/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu.tar.xz</a> 。</p>
+<a id="more"></a>
+<p>假设将其解压到了~/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu ，首先设置一下环境变量：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> PATH=~/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu/bin:<span class="variable">$PATH</span></span></span><br></pre></td></tr></table></figure></p>
+<p>然后下载Nginx 1.15.6，zlib 1.2.11，openssl 1.1.1d，pcre 8.43（当然版本不一定要按照这个来）。Nginx不是使用autotools也不是cmake这样的构建系统，而是自己编写的一套shell脚本，同时它依赖的zlib、openssl、pcre都可以通过源码构建静态链接进去，我这里选择这样做只是为了测试，实际上你也可以依赖于目标系统的动态库。</p>
+<p>但由于Nginx的configure并不会把交叉编译信息传递给其依赖的zlib等源码目录构建参数，所以我们这里先进入每个依赖的源码目录，分别把pcre、openssl编译好。</p>
+<p>首先编译pcre（注意替换一下/path/to）：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> LDFLAGS=-L/path/to/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu/lib CFLAGS=-I/path/to/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu/include CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --<span class="built_in">disable</span>-shared --build=aarch64-linux-gnu --host=aarch64-linux</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br></pre></td></tr></table></figure></p>
+<p>之后编译openssl（注意替换一下/path/to）：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./Configure linux-aarch64 --prefix=/path/to/openssl-1.1.1d/.openssl no-shared no-threads --cross-compile-prefix=aarch64-linux-gnu-</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install</span></span><br></pre></td></tr></table></figure></p>
+<p>最后再来编译Nginx（注意替换一下/path/to）：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./configure --with-ld-opt=-L/path/to/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu/lib --with-cc-opt=-I/path/to/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu/include --prefix=/usr --with-zlib=/path/to/zlib-1.2.11 --with-pcre=/path/to/pcre-8.43 --with-openssl=/path/to/openssl-1.1.1d --with-http_ssl_module</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> make CC=aarch64-linux-gnu-gcc</span></span><br></pre></td></tr></table></figure></p>
+<p>可以安装到某个目录：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make install DESTDIR=/tmp/nginx</span></span><br></pre></td></tr></table></figure></p>
+<p>通过file可以看到针对的处理器确实是ARM aarch64：<br><img src="/images/file-nginx.png" alt="file nginx"></p>
+<p>最后可以把整个/tmp/nginx上传到NanoPi Neo2上面进行测试（如果没有网络的话，可以通过screen、minicom、C-Kermit之类的工具，通过usb2uart连接上去。)</p>
+<p><img src="/images/nginx-running.png" alt="nginx running"></p>
 
       
     </div>
@@ -405,6 +406,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/cross-compiling/" rel="tag"># cross compiling</a>
+          
+        </div>
+      
 
       
       
@@ -414,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/02/read-time-from-rtc/" rel="next" title="read time from rtc">
-                <i class="fa fa-chevron-left"></i> read time from rtc
+              <a href="/2019/10/18/access-multiple-clusters-with-kubernetes-context/" rel="next" title="access multiple clusters with kubernetes context">
+                <i class="fa fa-chevron-left"></i> access multiple clusters with kubernetes context
               </a>
             
           </div>
@@ -423,10 +430,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/30/difference-of-start-and-main/" rel="prev" title="difference of _start and main">
-                difference of _start and main <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="Life is different">
 <meta property="og:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-20T13:51:36.192Z">
+<meta property="og:updated_time" content="2020-02-26T07:46:43.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kubernetes中的容器cpu和内存限制">
 <meta name="twitter:description" content="K8S部署容器时可以指定CPU和内存的资源限制，其真正实现也是通过CGroups做到的。我们来看个例子： 12345678910111213141516171819apiVersion: v1kind: Podmetadata:  labels:    app: nginx  name: nginxspec:  containers:  - image: nginx    name: nginx">
@@ -372,7 +372,7 @@
 
       
         <p>K8S部署容器时可以<a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/cpu-memory-limit/" target="_blank" rel="noopener">指定CPU和内存的资源限制</a>，其真正实现也是通过CGroups做到的。我们来看个例子：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    resources:</span></span><br><span class="line"><span class="attr">      limits:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">500</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">400</span><span class="string">Mi</span></span><br><span class="line"><span class="attr">      requests:</span></span><br><span class="line"><span class="attr">        cpu:</span> <span class="number">200</span><span class="string">m</span></span><br><span class="line"><span class="attr">        memory:</span> <span class="number">200</span><span class="string">Mi</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">resources:</span></span><br><span class="line">      <span class="attr">limits:</span></span><br><span class="line">        <span class="attr">cpu:</span> <span class="string">500m</span></span><br><span class="line">        <span class="attr">memory:</span> <span class="string">400Mi</span></span><br><span class="line">      <span class="attr">requests:</span></span><br><span class="line">        <span class="attr">cpu:</span> <span class="string">200m</span></span><br><span class="line">        <span class="attr">memory:</span> <span class="string">200Mi</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>limits表示指定资源的上限，requests表示创建容器时初始的资源请求。cpu的单位m表示1/1000核，比如这里的500m，其实表示0.5核心。如果不带单位，比如1或者1.0，则表示分配1核cpu。内存的单位可以是Mi、Gi，分别表示MB和GB。这里的设置就表示初始时cpu 0.2核，内存200M；上限cpu 0.5核，内存400M。</p>
 <p>首先来看cpu。</p>
@@ -499,7 +499,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -536,7 +536,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
@@ -590,7 +592,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

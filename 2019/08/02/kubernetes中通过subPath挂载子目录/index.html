@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://ideal.github.io/images/mnt-in-container.png">
 <meta property="og:image" content="http://ideal.github.io/images/srv-in-node.png">
-<meta property="og:updated_time" content="2019-10-20T13:51:36.192Z">
+<meta property="og:updated_time" content="2020-02-26T07:46:43.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kubernetes中通过subPath挂载子目录">
 <meta name="twitter:description" content="kubernetes支持很多种Volume，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被反弹Shell之后，会存在安全隐患。我们可以通过s">
@@ -376,7 +376,7 @@
       
         <p>kubernetes支持很多种<a href="https://kubernetes.io/docs/concepts/storage/volumes/" target="_blank" rel="noopener">Volume</a>，比如NFS，甚至AWS的EBS，阿里云的OSS等。某些时候，我们可能需要针对不同的容器，挂载一个存储卷的不同子目录，以达到控制权限等目的。比如将用户数据放在一个NFS文件系统上，不同的用户区分不同的子目录。如果每个用户的容器，都直接挂载了整个NFS，同时又不能封禁容器的外网访问，那么这样是不安全的，如果被<a href="https://www.cnblogs.com/ssooking/p/5900664.html" target="_blank" rel="noopener">反弹Shell</a>之后，会存在安全隐患。我们可以通过subPath来解决这个问题。以hostPath类型的Volume为例，假设我们需要挂载/srv/aaa/bbb这个目录到/mnt/aaa/bbb，以及/srv/ccc/ddd目录到/mnt/ccc/ddd，而/srv下面的其他目录和文件，希望在容器中不可见，那么这样就可以做到：</p>
 <a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    volumeMounts:</span></span><br><span class="line"><span class="attr">    - mountPath:</span> <span class="string">/mnt/aaa/bbb</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      subPath:</span> <span class="string">aaa/bbb</span></span><br><span class="line"><span class="attr">    - mountPath:</span> <span class="string">/mnt/ccc/ddd</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      subPath:</span> <span class="string">ccc/ddd</span></span><br><span class="line"><span class="attr">  volumes:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">volume-test</span></span><br><span class="line"><span class="attr">      hostPath:</span></span><br><span class="line"><span class="attr">        path:</span> <span class="string">/srv</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/mnt/aaa/bbb</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">volume-test</span></span><br><span class="line">      <span class="attr">subPath:</span> <span class="string">aaa/bbb</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/mnt/ccc/ddd</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">volume-test</span></span><br><span class="line">      <span class="attr">subPath:</span> <span class="string">ccc/ddd</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">volume-test</span></span><br><span class="line">      <span class="attr">hostPath:</span></span><br><span class="line">        <span class="attr">path:</span> <span class="string">/srv</span></span><br></pre></td></tr></table></figure>
 <p>启动容器之后，我们通过<code>kubectl exec -it nginx /bin/bash</code>连进去查看是否达到我们想要的效果。</p>
 <p><img src="/images/mnt-in-container.png" alt="/mnt in container"></p>
 <p>而在节点上的/srv是这样的：</p>
@@ -491,7 +491,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -528,7 +528,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
@@ -582,7 +584,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

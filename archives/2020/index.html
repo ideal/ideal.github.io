@@ -108,26 +108,20 @@
 
 
 
-  <meta name="description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
-<meta property="og:type" content="article">
-<meta property="og:title" content="how to calculate page directory and page table size">
-<meta property="og:url" content="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Life is different">
+<meta property="og:url" content="http://ideal.github.io/archives/2020/index.html">
 <meta property="og:site_name" content="Life is different">
-<meta property="og:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
-<meta property="og:updated_time" content="2020-02-26T07:46:43.775Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how to calculate page directory and page table size">
-<meta name="twitter:description" content="Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法： 由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。 每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。 所以可以看到，它填充了4个页的页表。 很明显4个页表，只需要页目录里的4项，就可以定位">
-<meta name="twitter:image" content="http://ideal.github.io/images/page-directory-and-page-table.png">
+<meta name="twitter:title" content="Life is different">
 
 
 
 
 
 
-  <link rel="canonical" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+  <link rel="canonical" href="http://ideal.github.io/archives/2020/">
 
 
 
@@ -137,7 +131,7 @@
   };
 </script>
 
-  <title>how to calculate page directory and page table size | Life is different</title>
+  <title>归档 | Life is different</title>
   
 
 
@@ -184,7 +178,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-archive">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -233,7 +227,7 @@
         
         
           
-          <li class="menu-item menu-item-archives">
+          <li class="menu-item menu-item-archives menu-item-active">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -245,6 +239,19 @@
 
   
     
+
+    
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
 
   
 
@@ -270,190 +277,78 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
 
-  
+      
+      <span class="archive-page-counter">
+        
+        
+        
+          
+        
+        嗯..! 目前共计 14 篇日志。 继续努力。
+      </span>
+      
 
-  
-  
-  
+      
 
-  
+        
+        
+        
+
+        
+          
+          <div class="collection-title">
+            <h1 class="archive-year" id="archive-year-2020">2020</h1>
+          </div>
+        
+        
+
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ideal.github.io/2018/04/08/how-to-calculate-page-directory-and-page-table-size/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="<a href=" https: github.com ideal">ideal">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Life is different">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2020/02/26/cross-compling-nginx-for-armv8/" itemprop="url">
+              
+                <span itemprop="name">cross compling Nginx for ARMv8</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">how to calculate page directory and page table size
-              
-            
-          </h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2020-02-26T15:39:27+08:00" content="2020-02-26">
+          02-26
+        </time>
+      </div>
 
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-04-08 12:59:44" itemprop="dateCreated datePublished" datetime="2018-04-08T12:59:44+08:00">2018-04-08</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/08/how-to-calculate-page-directory-and-page-table-size/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>Linux 0.11保护模式下能寻址16MB地址空间（虽然地址是32位的）。需要的页表数和页目录表数计算方法：</p>
-<p>由于页的大小是4096（2^12)，那么需要的页表项目是（2^24/2^12）= 2^12，也就是4096个页表项。</p>
-<p>每个页表项是4字节，那么总共的大小就是2^14个字节，也就是16KB，刚好是4页。</p>
-<p>所以可以看到，它填充了4个页的页表。</p>
-<p>很明显4个页表，只需要页目录里的4项，就可以定位这些页表了。</p>
-<p>也可以这样计算：16KB，也就是2^14，(2^14/2^12) = 4。所以只占用了页目录表的前4项。</p>
-<p><img src="/images/page-directory-and-page-table.png" alt="page directory and page table"></p>
-<p>实际上，4KB大小的页目录表，已经能够寻址4GB的空间了。</p>
-<p>2^32 / 2^12 = 2^20</p>
-<p>每项4字节，也就是需要4MB的页表。</p>
-<p>为了寻址4MB的页表：2^22 / 2^12 = 1024，每个4字节，刚好页目录表是4KB。</p>
-<p>参考：</p>
-<ol>
-<li><a href="https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html" target="_blank" rel="noopener">https://nieyong.github.io/wiki_cpu/CPU%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84-MMU.html</a></li>
-</ol>
-
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/02/02/read-time-from-rtc/" rel="next" title="read time from rtc">
-                <i class="fa fa-chevron-left"></i> read time from rtc
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/30/difference-of-start-and-main/" rel="prev" title="difference of _start and main">
-                difference of _start and main <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
+
+      
+
+    </div>
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
           
-
-  
-    <div class="comments" id="comments">
-    </div>
-  
-
-
 
         </div>
         
@@ -693,10 +588,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
-
-
 
   
 
